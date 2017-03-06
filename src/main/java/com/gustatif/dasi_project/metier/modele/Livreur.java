@@ -17,7 +17,7 @@ import javax.persistence.Id;
  * @author carhiliuc
  */
 @Entity
-public class Livreur implements Serializable {
+public class Livreur extends Model implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

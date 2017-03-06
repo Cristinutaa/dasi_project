@@ -14,7 +14,7 @@ import javax.persistence.Query;
  *
  * @author carhiliuc
  */
-public class LivreurDAO extends CRUDDAo<Livraison>{
+public class LivreurDAO extends CRUDDAo<Livreur>{
     
     public Livreur findById(long id) throws Exception {
         EntityManager em = JpaUtil.obtenirEntityManager();
