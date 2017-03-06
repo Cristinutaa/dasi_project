@@ -15,30 +15,10 @@ import javax.persistence.Query;
  * @author carhiliuc
  */
 public class LivreurDAO extends CRUDDAo<Livreur>{
-    
-    public Livreur findById(long id) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        Livreur livreur = null;
-        try {
-            livreur = em.find(Livreur.class, id);
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreur;
+
+    @Override
+    protected Class<Livreur> getEntityClass() {
+        return Livreur.class;
     }
     
-    public List<Livreur> findAll() throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<Livreur> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM Livreurs l");
-            livreurs = (List<Livreur>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        
-        return livreurs;
-    }
 }
