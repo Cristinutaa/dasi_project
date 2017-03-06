@@ -11,28 +11,33 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  *
  * @author carhiliuc
  */
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-public class Livreur extends Model implements Serializable {
+public abstract class Livreur extends Model implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LatLng location;
     private double charge_maximale;
-    private boolean libre;
+    private boolean libre = true;
     private String adresse_base;
     
     public Livreur() {
     }
-    
+
     public Livreur(double charge_maximale, String adresse_base) {
         this.charge_maximale = charge_maximale;
         this.adresse_base = adresse_base;
     }
+    
+  
 
     public Long getId() {
         return id;
