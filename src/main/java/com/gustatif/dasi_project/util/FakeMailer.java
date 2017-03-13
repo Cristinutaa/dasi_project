@@ -11,7 +11,7 @@ public class FakeMailer {
         strBuilder.append("Expéditeur: " + expediteur + END_LINE);
         strBuilder.append("Destinataire: " + destinataire + END_LINE);
         strBuilder.append("Sujet: " + sujet + END_LINE);
-        strBuilder.append("Corps: " + END_LINE);
+        strBuilder.append("Corps: " + corps + END_LINE);
         
         System.out.println(strBuilder.toString());
         

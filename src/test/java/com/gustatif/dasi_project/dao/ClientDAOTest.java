@@ -43,7 +43,7 @@ public class ClientDAOTest {
         JpaUtil.ouvrirTransaction();
         
         Client c1 = new Client("nom_client", "prenom_client", "mail_client", "adresse_client");
-        cDAO.insert(c1);
+        c1 = cDAO.insert(c1);
         
         try {
             assertTrue(cDAO.findAll().contains(c1));
@@ -57,13 +57,5 @@ public class ClientDAOTest {
         JpaUtil.validerTransaction();
         
     }
-    
-    @Test
-    public void findAllTest() {
-        
-        
-        
-    }
-
     
 }

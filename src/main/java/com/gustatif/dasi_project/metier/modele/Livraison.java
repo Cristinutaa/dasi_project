@@ -1,6 +1,9 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class Livraison extends Model {
@@ -30,6 +35,9 @@ public class Livraison extends Model {
     
     @ManyToOne
     protected Restaurant restaurant;
+    
+    @OneToMany(mappedBy = "livraison")
+    protected List<LigneLivraison> lignesLivraisons = new ArrayList<>();
     
     public Livraison() {}
 
@@ -79,6 +87,50 @@ public class Livraison extends Model {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<LigneLivraison> getLignesLivraisons() {
+        return lignesLivraisons;
+    }
+
+    protected void setLignesLivraisons(List<LigneLivraison> lignesLivraisons) {
+        this.lignesLivraisons = lignesLivraisons;
+    }
+    
+    public Livraison ajouterProduit( Produit p ) {
+        
+        LigneLivraison ligneLivraison = null;
+        
+        for( LigneLivraison ligneLivraisonCourant : lignesLivraisons ) {
+            if( ligneLivraisonCourant.getProduit().equals(p) ) {
+                ligneLivraison = ligneLivraisonCourant;
+            }
+        }
+       
+        if( ligneLivraison == null ) {
+            ligneLivraison = new LigneLivraison();
+            ligneLivraison.setLivraison(this);
+            ligneLivraison.setProduit(p);
+            ligneLivraison.setQuantite(1);
+            lignesLivraisons.add(ligneLivraison);
+        } else {
+            ligneLivraison.setQuantite( ligneLivraison.getQuantite() + 1 );
+        }
+        
+        return this;
+    }
+    
+    public Livraison supprimerProduit( Produit p ) {
+        
+        for( LigneLivraison ligneLivraisonCourant : lignesLivraisons ) {
+            if( ligneLivraisonCourant.getProduit().equals(p) ) {
+                if( ligneLivraisonCourant.getQuantite() > 0 ) {
+                    ligneLivraisonCourant.setQuantite( ligneLivraisonCourant.getQuantite() - 1 );
+                }
+            }
+        }
+        
+        return this;
     }
     
 }

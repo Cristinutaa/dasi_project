@@ -9,9 +9,13 @@ import com.gustatif.dasi_project.dao.ProduitDAO;
 import com.gustatif.dasi_project.dao.RestaurantDAO;
 import com.gustatif.dasi_project.exception.EmailAlreadyUsedException;
 import com.gustatif.dasi_project.metier.modele.Client;
+import com.gustatif.dasi_project.metier.modele.Livraison;
+import com.gustatif.dasi_project.metier.modele.Restaurant;
 import com.gustatif.dasi_project.util.FakeMailer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import javax.persistence.NoResultException;
 
 public class ServiceMetier {
     
@@ -63,7 +67,7 @@ public class ServiceMetier {
                 c.getMail(), 
                 "Bienvenue chez Gustat'IF",
                 "Bonjour " + c.getNom() + ", \n" +
-                "Votre   inscription   au   service GUSTAT’IF" +
+                "Votre inscription   au   service GUSTAT’IF" +
                 " a malencontreusement échoué...   Merci de recommencer ultérieurement.");
             
         }
@@ -104,4 +108,50 @@ public class ServiceMetier {
         
     }
     
+    public List<Restaurant> findRestaurants() {
+        
+        try {
+            return restaurantDAO.findAll();
+        } catch( Exception e) {
+            System.err.println(e.getMessage());   
+        }
+        return new ArrayList<>();
+        
+    }
+    
+    public Restaurant findRestaurantById( Long id ) {
+        
+        try {
+            return restaurantDAO.findById( id );
+        } catch( NoResultException noResult ) {
+            return null;
+        } catch( Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public Livraison passerCommande( Livraison l ) {
+        
+        
+        
+        return null;
+        
+    }
+    
+    public Livraison validerLivraison( Livraison l ) {
+        
+        try {
+            
+            l.setDateFin(Calendar.getInstance().getTime());
+            return livraisonDAO.update(l);
+            
+        } catch( Exception e ) {
+            System.err.println(e.getMessage());
+        }
+        
+        return null;
+        
+    }
+ 
 }
