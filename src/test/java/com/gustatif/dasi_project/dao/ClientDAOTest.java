@@ -6,6 +6,8 @@
 package com.gustatif.dasi_project.dao;
 
 import com.gustatif.dasi_project.metier.modele.Client;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,36 +22,48 @@ import static org.junit.Assert.*;
 public class ClientDAOTest {
     
     public ClientDAOTest() {
+        JpaUtil.creerEntityManager();
     }
     
     @BeforeClass
     public static void setUpClass() {
+        JpaUtil.init();
     }
     
     @AfterClass
     public static void tearDownClass() {
+        JpaUtil.destroy();
     }
     
-    @Before
-    public void setUp() {
+    @Test
+    public void createRemoveTest() {
+        
+        ClientDAO cDAO = new ClientDAO();
+        
+        JpaUtil.ouvrirTransaction();
+        
+        Client c1 = new Client("nom_client", "prenom_client", "mail_client", "adresse_client");
+        cDAO.insert(c1);
+        
+        try {
+            assertTrue(cDAO.findAll().contains(c1));
+            cDAO.remove(c1);
+            assertFalse(cDAO.findAll().contains(c1));
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+            Logger.getLogger(ClientDAOTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        JpaUtil.validerTransaction();
+        
     }
     
-    @After
-    public void tearDown() {
+    @Test
+    public void findAllTest() {
+        
+        
+        
     }
 
-    /**
-     * Test of getEntityClass method, of class ClientDAO.
-     */
-    @Test
-    public void testGetEntityClass() {
-        System.out.println("getEntityClass");
-        ClientDAO instance = new ClientDAO();
-        Class<Client> expResult = null;
-        Class<Client> result = instance.getEntityClass();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
     
 }

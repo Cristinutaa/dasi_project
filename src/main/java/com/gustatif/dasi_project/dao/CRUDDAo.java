@@ -9,9 +9,10 @@ abstract public class CRUDDAo<T extends Model> {
     
     abstract protected Class<T> getEntityClass();
     
-    public void insert( T e ) {
+    public T insert( T e ) {
         EntityManager em = JpaUtil.obtenirEntityManager();
         em.persist(e);
+        return e;
     }
    
     public T update( T e ) {
