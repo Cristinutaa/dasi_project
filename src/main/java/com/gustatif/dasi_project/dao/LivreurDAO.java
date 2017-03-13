@@ -18,37 +18,13 @@ import javax.persistence.Query;
  */
 public class LivreurDAO extends CRUDDAo<Livreur>{
         
-    public List<Livreur> findByChargeMaximale(double poids) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<Livreur> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale = " + poids);
-            livreurs = (List<Livreur>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
-    
-     public List<Livreur> findByChargeNecessaire(double poids) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<Livreur> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale >= " + poids);
-            livreurs = (List<Livreur>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
      
     public List<Livreur> findByChargeNecessaireEtLibre(double poids) throws Exception {
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale >= " + poids + " AND libre = true");
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE l.chargeMaximale >= :poids AND l.libre = true");
+            q.setParameter("poids", poids);
             livreurs = (List<Livreur>) q.getResultList();
         }
         catch(Exception e) {
@@ -56,51 +32,14 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         }
         return livreurs;
     }
-        
-     public List<LivreurPersonne> findByNom(String name) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<LivreurPersonne> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM LivreurPersonne l WHERE nom = " + name);
-            livreurs = (List<LivreurPersonne>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
-     
-    public List<LivreurPersonne> findByPrenom(String name) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<LivreurPersonne> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM LivreurPersonne l WHERE prenom = " + name);
-            livreurs = (List<LivreurPersonne>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
-    
-    public List<LivreurPersonne> findByNomPrenom(String nom, String prenom) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<LivreurPersonne> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM LivreurPersonne l WHERE prenom = " + prenom + " and nom = " + nom);
-            livreurs = (List<LivreurPersonne>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
+         
     
      public List<LivreurDrone> findByVitesse(double vitesse) throws Exception {
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<LivreurDrone> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE vitesseMoyenne = " + vitesse);
+            Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE l.vitesseMoyenne = :vitesse");
+            q.setParameter("vitesse", vitesse);
             livreurs = (List<LivreurDrone>) q.getResultList();
         }
         catch(Exception e) {
