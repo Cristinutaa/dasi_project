@@ -6,6 +6,7 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
+import com.gustatif.dasi_project.util.GeoTest;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,8 +25,9 @@ public abstract class Livreur extends Model implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private LatLng location;
-    private double charge_maximale;
+    private double longitude;
+    private double latitude;
+    private double chargeMaximale;
     private boolean libre = true;
     private String adresse_base;
     
@@ -33,22 +35,28 @@ public abstract class Livreur extends Model implements Serializable {
     }
 
     public Livreur(double charge_maximale, String adresse_base) {
-        this.charge_maximale = charge_maximale;
+        this.chargeMaximale = charge_maximale;
         this.adresse_base = adresse_base;
     }
     
-  
-
     public Long getId() {
         return id;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public double getCharge_maximale() {
-        return charge_maximale;
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public LatLng getLocation() {
+        return new LatLng(latitude,longitude);
+    }
+
+    public double getChargeMaximale() {
+        return chargeMaximale;
     }
 
     public boolean isLibre() {
@@ -59,16 +67,21 @@ public abstract class Livreur extends Model implements Serializable {
         return adresse_base;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public void setCharge_maximale(double charge_maximale) {
-        this.charge_maximale = charge_maximale;
+    public void setLocation(LatLng location){
+        this.longitude = location.lng;
+        this.latitude = location.lat;
+    }
+
+    public void setCharge_maximale(double chargeMaximale) {
+        this.chargeMaximale = chargeMaximale;
     }
 
     public void setLibre(boolean libre) {
@@ -78,10 +91,16 @@ public abstract class Livreur extends Model implements Serializable {
     public void setAdresse_base(String adresse_base) {
         this.adresse_base = adresse_base;
     }
+    
+    public double getDistance(LatLng from, LatLng... steps){
+        GeoTest temp = new GeoTest(); 
+        return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
+    }
 
     @Override
     public String toString() {
-        return "Livreur{" + "id=" + id + ", location=" + location + ", charge_maximale=" + charge_maximale + ", libre=" + libre + ", adresse_base=" + adresse_base + '}';
+        return "Livreur{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + ", chargeMaximale=" + chargeMaximale + ", libre=" + libre + ", adresse_base=" + adresse_base + '}';
     }
+
     
 }

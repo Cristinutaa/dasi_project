@@ -5,37 +5,40 @@
  */
 package com.gustatif.dasi_project.metier.modele;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author carhiliuc
  */
+@Entity
 public class LivreurDrone extends Livreur{
-    private double vitesse_moyenne;
+    private double vitesseMoyenne;
 
     public LivreurDrone() {
     }
 
     
-    public LivreurDrone(double vitesse_moyenne) {
-        this.vitesse_moyenne = vitesse_moyenne;
+    public LivreurDrone(double vitesseMoyenne) {
+        this.vitesseMoyenne = vitesseMoyenne;
     }
 
-    public LivreurDrone(double vitesse_moyenne, double charge_maximale, String adresse_base) {
-        super(charge_maximale, adresse_base);
-        this.vitesse_moyenne = vitesse_moyenne;
+    public LivreurDrone(double vitesseMoyenne, double chargeMaximale, String adresse_base) {
+        super(chargeMaximale, adresse_base);
+        this.vitesseMoyenne = vitesseMoyenne;
     }
 
-    public double getVitesse_moyenne() {
-        return vitesse_moyenne;
+    public double getVitesseMoyenne() {
+        return vitesseMoyenne;
     }
 
-    public void setVitesse_moyenne(double vitesse_moyenne) {
-        this.vitesse_moyenne = vitesse_moyenne;
+    public void setVitesseMoyenne(double vitesseMoyenne) {
+        this.vitesseMoyenne = vitesseMoyenne;
     }
 
     @Override
     public String toString() {
-        return "LivreurDrone{" + "vitesse_moyenne=" + vitesse_moyenne + '}';
+        return "LivreurDrone{" + "vitesseMoyenne=" + vitesseMoyenne + '}';
     }
        
 }

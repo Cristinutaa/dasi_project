@@ -17,12 +17,12 @@ import javax.persistence.Query;
  * @author carhiliuc
  */
 public class LivreurDAO extends CRUDDAo<Livreur>{
-    
+        
     public List<Livreur> findByChargeMaximale(double poids) throws Exception {
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE charge_maximale = " + poids);
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale = " + poids);
             livreurs = (List<Livreur>) q.getResultList();
         }
         catch(Exception e) {
@@ -35,7 +35,7 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE charge_maximale >= " + poids);
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale >= " + poids);
             livreurs = (List<Livreur>) q.getResultList();
         }
         catch(Exception e) {
@@ -48,7 +48,7 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM Livreur l WHERE charge_maximale >= " + poids + " AND libre = true");
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE chargeMaximale >= " + poids + " AND libre = true");
             livreurs = (List<Livreur>) q.getResultList();
         }
         catch(Exception e) {
@@ -100,7 +100,7 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<LivreurDrone> livreurs = null;
         try {
-            Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE vitesse_moyenne = " + vitesse);
+            Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE vitesseMoyenne = " + vitesse);
             livreurs = (List<LivreurDrone>) q.getResultList();
         }
         catch(Exception e) {
@@ -108,8 +108,9 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         }
         return livreurs;
     }
+     
     
-    
+       
 
     @Override
     protected Class<Livreur> getEntityClass() {

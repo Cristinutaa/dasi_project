@@ -5,10 +5,13 @@
  */
 package com.gustatif.dasi_project.metier.modele;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author carhiliuc
  */
+@Entity
 public class LivreurPersonne extends Livreur{
     private String nom;
     private String prenom;
