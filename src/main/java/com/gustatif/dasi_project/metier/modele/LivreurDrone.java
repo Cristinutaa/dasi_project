@@ -5,6 +5,8 @@
  */
 package com.gustatif.dasi_project.metier.modele;
 
+import com.google.maps.model.LatLng;
+import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 
 /**
@@ -34,6 +36,11 @@ public class LivreurDrone extends Livreur{
 
     public void setVitesseMoyenne(double vitesseMoyenne) {
         this.vitesseMoyenne = vitesseMoyenne;
+    }
+    
+     public double getDistance(LatLng from, LatLng... steps){
+        GeoTest temp = new GeoTest(); 
+        return temp.getFlightDistanceInKm(this.getLocation(), from);
     }
 
     @Override
