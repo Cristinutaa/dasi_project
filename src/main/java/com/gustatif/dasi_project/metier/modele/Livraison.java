@@ -24,10 +24,7 @@ public class Livraison extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date dateFin;
     protected boolean livree;
-    
-    @ManyToMany
-    protected Map<Produit, Integer> produits;
-    
+        
     @ManyToOne
     protected Client client;
     
@@ -63,10 +60,6 @@ public class Livraison extends Model {
     public void setLivree(boolean livree) {
         this.livree = livree;
     }
-
-    public Map<Produit, Integer> getProduits() {
-        return produits;
-    }   
     
     public boolean isConfirmee() {
         return this.dateFin != null;
