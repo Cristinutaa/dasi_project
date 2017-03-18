@@ -10,6 +10,14 @@ import javax.persistence.TypedQuery;
 
 public class ClientDAO extends CRUDDAo<Client>{
 
+    public ClientDAO() {
+        super();
+    }
+    
+    public ClientDAO(EntityManager em) {
+        super(em);
+    }
+
     @Override
     protected Class<Client> getEntityClass() {
         return Client.class;
@@ -17,8 +25,6 @@ public class ClientDAO extends CRUDDAo<Client>{
     
     public Client findByEmail( String email ) {
         Objects.requireNonNull(email);
-        
-        EntityManager em = JpaUtil.obtenirEntityManager();
         TypedQuery<Client> findByEmailQuery = em.createQuery("Select c From Client c Where c.mail = :email", Client.class);
         Client client = null;
         try {
@@ -34,16 +40,11 @@ public class ClientDAO extends CRUDDAo<Client>{
     
     @Override
     public Client insert(Client c) {
-        EntityManager em = JpaUtil.obtenirEntityManager();
         if( findByEmail( c.getMail() ) != null ) {
             return null;
         }
         em.persist(c);
-        
         return c;
-    }
-    
-    
-    
+    } 
     
 }

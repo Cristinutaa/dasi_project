@@ -20,7 +20,7 @@ public class Restaurant extends Model implements Serializable {
     private Double longitude;
     private Double latitude;
 
-    @OneToMany
+    @OneToMany(mappedBy = "restaurant")
     private List<Produit> produits;
     
     protected Restaurant() {
@@ -81,8 +81,8 @@ public class Restaurant extends Model implements Serializable {
         this.longitude = longitude;
     }
 
-    public void addProduit(Produit produit) {
-        this.produits.add(produit);
+    public void setProduits(List<Produit> produits) {
+        this.produits = produits;
     }
 
     @Override

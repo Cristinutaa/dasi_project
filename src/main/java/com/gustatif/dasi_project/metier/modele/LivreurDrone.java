@@ -8,13 +8,21 @@ package com.gustatif.dasi_project.metier.modele;
 import com.google.maps.model.LatLng;
 import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author carhiliuc
  */
 @Entity
-public class LivreurDrone extends Livreur{
+public class LivreurDrone extends Livreur {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    
     private double vitesseMoyenne;
 
     public LivreurDrone() {

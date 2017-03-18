@@ -19,8 +19,7 @@ public class Client extends Model implements Serializable {
     private Double longitude;
     private Double latitude;
 
-    protected Client() {
-    }
+    protected Client() {}
     
     public Client(String nom, String prenom, String mail, String adresse) {
         this.nom = nom;
@@ -59,25 +58,30 @@ public class Client extends Model implements Serializable {
         return latitude;
     }
 
-    public void setNom(String nom) {
+    public Client setNom(String nom) {
         this.nom = nom;
+        return this;
     }
 
-    public void setPrenom(String prenom) {
+    public Client setPrenom(String prenom) {
         this.prenom = prenom;
+        return this;
     }
 
-    public void setMail(String mail) {
+    public Client setMail(String mail) {
         this.mail = mail;
+        return this;
     }
 
-    public void setAdresse(String adresse) {
+    public Client setAdresse(String adresse) {
         this.adresse = adresse;
+        return this;
     }
 
-    public void setLatitudeLongitude(Double latitude, Double longitude) {
+    public Client setLatitudeLongitude(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+        return this;
     }
 
     @Override

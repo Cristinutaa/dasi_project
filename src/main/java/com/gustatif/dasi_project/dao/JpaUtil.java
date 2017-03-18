@@ -5,6 +5,7 @@
  */
 package com.gustatif.dasi_project.dao;
 
+import com.gustatif.dasi_project.config.Config;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -23,7 +24,7 @@ public class JpaUtil {
      * <br><strong>Vérifier le nom de l'unité de persistance
      * (cf.&nbsp;persistence.xml)</strong>
      */
-    public static final String PERSISTENCE_UNIT_NAME = "com.gustatif_dasi_persistance_unit";
+    public static final String PERSISTENCE_UNIT_NAME = Config.DEVELOPMENT_PERSISTENCE;
     /**
      * Factory de Entity Manager liée à l'unité de persistance.
      * <br/><strong>Vérifier le nom de l'unité de persistance indiquée dans
@@ -60,6 +61,21 @@ public class JpaUtil {
         System.err.println("[JpaUtil:Log] " + message);
         System.err.flush();
         pause(5);
+    }
+    
+    /**
+     * Initialise la Factory de Entity Manager.
+     * <br><strong>À utiliser uniquement au début de la méthode main() [projet
+     * Java Application] ou dans la méthode init() de la Servlet Contrôleur
+     * (ActionServlet) [projet Web Application].</strong>
+     * @param persistenceUnit The name of the unit persistence
+     */
+    public static synchronized void init( String persistenceUnit ) {
+        log("Initialisation de la factory de contexte de persistance");
+        if (entityManagerFactory != null) {
+            entityManagerFactory.close();
+        }
+        entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
     }
 
     /**

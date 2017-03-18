@@ -1,10 +1,7 @@
 package com.gustatif.dasi_project.vue;
 
-import com.gustatif.dasi_project.dao.ClientDAO;
 import com.gustatif.dasi_project.dao.JpaUtil;
-import com.gustatif.dasi_project.metier.modele.Client;
 import com.gustatif.dasi_project.metier.service.ServiceMetier;
-import java.util.List;
 
 /**
  *
@@ -12,16 +9,12 @@ import java.util.List;
  */
 public class Main {
     
-    public static ServiceMetier serviceMetier = new ServiceMetier();
-    protected static ClientDAO clientDAO = new ClientDAO();
-    
-    public static void main( String[] args ) throws Exception {
-      
+    public static void main( String[] args ) {
+        
         JpaUtil.init();
         JpaUtil.creerEntityManager();
-        
-        System.out.println( serviceMetier.findRestaurantById(1l) );
-        
+        final ServiceMetier services = new ServiceMetier();
+                
         JpaUtil.destroy();
         
     }

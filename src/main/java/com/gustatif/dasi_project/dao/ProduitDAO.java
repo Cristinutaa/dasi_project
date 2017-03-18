@@ -5,35 +5,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import com.gustatif.dasi_project.metier.modele.Produit;
 
-public class ProduitDAO {
+public class ProduitDAO extends CRUDDAo<Produit>{
     
-    public void save( Produit p ) {
-        JpaUtil.obtenirEntityManager().persist(p);
+    public ProduitDAO() {
+        super();
     }
     
-    public Produit findById(long id) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        Produit produit = null;
-        try {
-            produit = em.find(Produit.class, id);
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return produit;
+    public ProduitDAO( EntityManager em ) {
+        super(em);
     }
-    
-    public List<Produit> findAll() throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
-        List<Produit> produits = null;
-        try {
-            Query q = em.createQuery("SELECT p FROM Produit p");
-            produits = (List<Produit>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        
-        return produits;
+
+    @Override
+    protected Class<Produit> getEntityClass() {
+        return Produit.class;
     }
 }

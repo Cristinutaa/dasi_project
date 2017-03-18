@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Produit extends Model implements Serializable {
@@ -18,6 +19,9 @@ public class Produit extends Model implements Serializable {
     private String description;
     private Double poids;
     private Double prix;
+    
+    @ManyToOne
+    private Restaurant restaurant;
 
     public Produit() {
     }
@@ -63,6 +67,14 @@ public class Produit extends Model implements Serializable {
 
     public void setPrix(Double prix) {
         this.prix = prix;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override

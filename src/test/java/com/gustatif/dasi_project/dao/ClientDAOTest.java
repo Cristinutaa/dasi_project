@@ -5,6 +5,7 @@
  */
 package com.gustatif.dasi_project.dao;
 
+import com.gustatif.dasi_project.config.Config;
 import com.gustatif.dasi_project.metier.modele.Client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,7 @@ public class ClientDAOTest {
     
     @BeforeClass
     public static void setUpClass() {
-        JpaUtil.init();
+        JpaUtil.init( Config.TEST_PERSISTENCE );
     }
     
     @AfterClass
@@ -38,7 +39,7 @@ public class ClientDAOTest {
     @Test
     public void createRemoveTest() {
         
-        ClientDAO cDAO = new ClientDAO();
+        ClientDAO cDAO = new ClientDAO( JpaUtil.obtenirEntityManager() );
         
         JpaUtil.ouvrirTransaction();
         

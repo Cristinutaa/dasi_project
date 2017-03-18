@@ -12,12 +12,19 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
 public class Livraison extends Model {
+    
+    public enum Etat {
+        non_attribuee,
+        en_cours,
+        livree
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,23 +35,30 @@ public class Livraison extends Model {
     
     @Temporal(TemporalType.TIMESTAMP)
     protected Date dateFin;
-    protected boolean livree;
-        
-    @ManyToOne
-    protected Client client;
+    
+    @OneToOne
+    protected Commande commande;
+    
+    protected Etat etat;
     
     @ManyToOne
-    protected Restaurant restaurant;
-    
-    @OneToMany(mappedBy = "livraison")
-    protected List<LigneLivraison> lignesLivraisons = new ArrayList<>();
-    
-    public Livraison() {}
+    protected Livreur livreur;
+
+    public Livraison() {
+    }
+
+    public Livraison(Commande commande) {
+        this.commande = commande;
+        this.dateDebut = null;
+        this.dateFin = null;
+        this.livreur = null;
+        this.etat = Etat.non_attribuee;
+    }
 
     public Long getId() {
         return id;
     }
-    
+
     public Date getDateDebut() {
         return dateDebut;
     }
@@ -61,76 +75,28 @@ public class Livraison extends Model {
         this.dateFin = dateFin;
     }
 
-    public boolean isLivree() {
-        return livree;
+    public Commande getCommande() {
+        return commande;
     }
 
-    public void setLivree(boolean livree) {
-        this.livree = livree;
-    }
-    
-    public boolean isConfirmee() {
-        return this.dateFin != null;
+    public void setCommande(Commande commande) {
+        this.commande = commande;
     }
 
-    public Client getClient() {
-        return client;
+    public Etat getEtat() {
+        return etat;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setEtat(Etat etat) {
+        this.etat = etat;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public Livreur getLivreur() {
+        return livreur;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public List<LigneLivraison> getLignesLivraisons() {
-        return lignesLivraisons;
-    }
-
-    protected void setLignesLivraisons(List<LigneLivraison> lignesLivraisons) {
-        this.lignesLivraisons = lignesLivraisons;
-    }
-    
-    public Livraison ajouterProduit( Produit p ) {
-        
-        LigneLivraison ligneLivraison = null;
-        
-        for( LigneLivraison ligneLivraisonCourant : lignesLivraisons ) {
-            if( ligneLivraisonCourant.getProduit().equals(p) ) {
-                ligneLivraison = ligneLivraisonCourant;
-            }
-        }
-       
-        if( ligneLivraison == null ) {
-            ligneLivraison = new LigneLivraison();
-            ligneLivraison.setLivraison(this);
-            ligneLivraison.setProduit(p);
-            ligneLivraison.setQuantite(1);
-            lignesLivraisons.add(ligneLivraison);
-        } else {
-            ligneLivraison.setQuantite( ligneLivraison.getQuantite() + 1 );
-        }
-        
-        return this;
-    }
-    
-    public Livraison supprimerProduit( Produit p ) {
-        
-        for( LigneLivraison ligneLivraisonCourant : lignesLivraisons ) {
-            if( ligneLivraisonCourant.getProduit().equals(p) ) {
-                if( ligneLivraisonCourant.getQuantite() > 0 ) {
-                    ligneLivraisonCourant.setQuantite( ligneLivraisonCourant.getQuantite() - 1 );
-                }
-            }
-        }
-        
-        return this;
+    public void setLivreur(Livreur livreur) {
+        this.livreur = livreur;
     }
     
 }

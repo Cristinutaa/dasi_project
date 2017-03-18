@@ -10,6 +10,14 @@ import javax.persistence.Query;
 
 public class LivraisonDAO extends CRUDDAo<Livraison> {
 
+    public LivraisonDAO() {
+        super();
+    }
+    
+    public LivraisonDAO(EntityManager em) {
+        super(em);
+    }
+
     @Override
     protected Class<Livraison> getEntityClass() {
         return Livraison.class;
@@ -20,7 +28,6 @@ public class LivraisonDAO extends CRUDDAo<Livraison> {
     }
     
     public Livraison findLastOfClient( Client client ) {
-        EntityManager em = JpaUtil.obtenirEntityManager();
         Livraison l = null;
         try {
             Query q = em.createQuery("Select l From Livraison l where livraison.client = :client OrderBy livraison.dateDebut DESC");
@@ -30,7 +37,6 @@ public class LivraisonDAO extends CRUDDAo<Livraison> {
     }
     
     public List<Livraison> findNonLivrees() {
-        EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livraison> livraisons = new ArrayList<>();
         try {
             Query q = em.createQuery("SELECT l From Livraison l where livraison.livree = FALSE");

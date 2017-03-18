@@ -17,10 +17,17 @@ import javax.persistence.Query;
  * @author carhiliuc
  */
 public class LivreurDAO extends CRUDDAo<Livreur>{
+
+    public LivreurDAO() {
+        super();
+    }
+    
+    public LivreurDAO(EntityManager em) {
+        super(em);
+    }
         
      
     public List<Livreur> findByChargeNecessaireEtLibre(double poids) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
             Query q = em.createQuery("SELECT l FROM Livreur l WHERE l.chargeMaximale >= :poids AND l.libre = true");
@@ -35,7 +42,6 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
          
     
      public List<LivreurDrone> findByVitesse(double vitesse) throws Exception {
-        EntityManager em = JpaUtil.obtenirEntityManager();
         List<LivreurDrone> livreurs = null;
         try {
             Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE l.vitesseMoyenne = :vitesse");
