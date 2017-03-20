@@ -63,15 +63,7 @@ public class LivreurPersonne extends Livreur{
         return "LivreurPersonne{" + "nom=" + nom + ", prenom=" + prenom + '}';
     }
     
-     /*
-        Explications dans la classe Livreur
-    */
-    @Override
-    public double getDistance(LatLng from, LatLng... steps){
-        GeoTest temp = new GeoTest(); 
-        return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
-    }
-    
+   
     public String getMail() {
         return this.prenom + "." + this.nom + "@" + Config.DOMAIN_NAME;
     }

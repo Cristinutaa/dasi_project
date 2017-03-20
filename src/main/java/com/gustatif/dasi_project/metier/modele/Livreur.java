@@ -99,18 +99,6 @@ public abstract class Livreur extends Model implements Serializable {
         this.adresse_base = adresse_base;
     }
     
-    /**
-     * Calculer la distance entre le livreur et le client en minutes
-     * @param from - les coordonnees de client
-     * @param steps - La liste des passages obligées
-     * @return la valeur de la distance en minutes
-     */
-    abstract public double getDistance(LatLng from, LatLng... steps);
-
-    @Override
-    public String toString() {
-        return "Livreur{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + ", chargeMaximale=" + chargeMaximale + ", libre=" + libre + ", adresse_base=" + adresse_base + '}';
-    }
 
     public List<Livraison> getLivraisons() {
         return livraisons;
