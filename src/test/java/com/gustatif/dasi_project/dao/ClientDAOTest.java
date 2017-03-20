@@ -9,9 +9,7 @@ import com.gustatif.dasi_project.config.Config;
 import com.gustatif.dasi_project.metier.modele.Client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,13 +20,12 @@ import static org.junit.Assert.*;
  */
 public class ClientDAOTest {
     
-    public ClientDAOTest() {
-        JpaUtil.creerEntityManager();
-    }
+    public ClientDAOTest() {}
     
     @BeforeClass
     public static void setUpClass() {
         JpaUtil.init( Config.TEST_PERSISTENCE );
+        JpaUtil.creerEntityManager();
         
         ClientDAO cDAO = new ClientDAO( JpaUtil.obtenirEntityManager() );
         JpaUtil.ouvrirTransaction();

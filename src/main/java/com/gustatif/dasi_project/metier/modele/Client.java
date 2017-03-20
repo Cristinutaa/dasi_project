@@ -64,7 +64,7 @@ public class Client extends Model implements Serializable {
         return this;
     }
 
-    public LatLng getPoisition() {
+    public LatLng getLocation() {
         return new LatLng(latitude, longitude);
     }
     

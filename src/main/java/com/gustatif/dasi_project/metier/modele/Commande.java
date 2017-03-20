@@ -2,6 +2,7 @@ package com.gustatif.dasi_project.metier.modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,7 +33,7 @@ public class Commande extends Model {
     @OneToOne
     protected Livraison livraison;
     
-    @OneToMany(mappedBy = "commande")
+    @OneToMany(mappedBy = "commande", cascade = {CascadeType.ALL})
     protected List<LigneCommande> lignesCommandes;
     
     protected Commande() {}
