@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: unknown.binary:org.eclipse.persistence.moxy:SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.moxy/SNAPSHOT/org.eclipse.persistence.moxy-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.moxy/SNAPSHOT/org.eclipse.persistence.moxy-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.moxy/SNAPSHOT/org.eclipse.persistence.moxy-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

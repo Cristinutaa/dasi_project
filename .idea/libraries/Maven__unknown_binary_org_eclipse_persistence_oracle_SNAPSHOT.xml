@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: unknown.binary:org.eclipse.persistence.oracle:SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.oracle/SNAPSHOT/org.eclipse.persistence.oracle-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.oracle/SNAPSHOT/org.eclipse.persistence.oracle-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/unknown/binary/org.eclipse.persistence.oracle/SNAPSHOT/org.eclipse.persistence.oracle-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
