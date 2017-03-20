@@ -28,6 +28,7 @@ import com.gustatif.dasi_project.util.GeoTest;
 import com.gustatif.dasi_project.util.Validator;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.NoResultException;
@@ -60,7 +61,7 @@ public class ServiceMetier {
      * @throws InvalidEmailFormatException Exception renvoyée si l'adresse e-mail
      * a un format incorrect
      */
-    public Client creerClient( 
+    public Client enregistrerClient( 
             String nom, 
             String prenom, 
             String email, 
@@ -92,12 +93,8 @@ public class ServiceMetier {
                 
         Client clientCree = new Client(nom, prenom, email, adresse);
         
-        LatLng coordonnees = GeoTest.getLatLng(clientCree.getAdresse());
-        
-        if( null == coordonnees ) {
-            throw new InvalidAddressException("Adresse incorrecte, les coordonnées n'ont pas pu être calculées.");
-        } else {
-            clientCree.setLatitudeLongitude(coordonnees.lat, coordonnees.lng);
+        if( !ServiceTechnique.calculerCoordonnees(clientCree) ) {
+            throw new InvalidAddressException("L'adresse fournie ne permet pas de calculer les coordonnées GPS.");
         }
         
         JpaUtil.ouvrirTransaction();
@@ -130,7 +127,7 @@ public class ServiceMetier {
      * @param mail Le mail à rechercher
      * @return Client|null
      */
-    public Client findClientByMail( String mail ) {
+    public Client authentifierClient( String mail ) {
         Client client = null;
         try {
             client = clientDAO.findByEmail(mail);
@@ -189,7 +186,7 @@ public class ServiceMetier {
         
     }
     
-    public List<Restaurant> findRestaurants() {
+    public List<Restaurant> findAllRestaurants() {
         
         try {
             return restaurantDAO.findAll();
@@ -200,7 +197,7 @@ public class ServiceMetier {
         
     }
     
-    public List<Restaurant> findRestaurantsByName( String name ) {
+    public List<Restaurant> searchRestaurantByName( String name ) {
         List<Restaurant> result = new ArrayList<>();
         
         try {
@@ -350,7 +347,7 @@ public class ServiceMetier {
         }
         
         Livraison livraison = c.valider();
-        Livreur livreur = livreurDAO.findMeilleurLivreurPour(livraison);
+        Livreur livreur = ServiceTechnique.findMeilleurLivreurPour(livreurDAO, livraison);
         
         if( null == livreur ) {
             return null;
@@ -360,12 +357,14 @@ public class ServiceMetier {
         livraison.setLivreur(livreur);
         livraison.setEtat(Livraison.Etat.en_cours);
         livreur.getLivraisons().add(livraison);
+        livreur.setLibre(false);
         
         JpaUtil.ouvrirTransaction();
-        
+        //-------------------------------------
         livraison = livraisonDAO.insert(livraison);
         Commande majCommande = commandeDAO.update(c);
         Livreur majLivreur = livreurDAO.update(livreur);
+        //--------------------------------------
         if( null != livraison && null != majCommande && null != majLivreur ) {
             JpaUtil.validerTransaction();
             
@@ -383,6 +382,12 @@ public class ServiceMetier {
     
     public Livraison validerLivraison( Livraison l ) throws InvalidReferenceException, InvalidActionException {
         
+        return validerLivraison(l, Calendar.getInstance().getTime());
+        
+    }
+    
+    public Livraison validerLivraison( Livraison l, Date date ) throws InvalidReferenceException, InvalidActionException {
+        
         if( !livraisonDAO.contains(l) ) {
             throw new InvalidReferenceException("La livraison n'existe pas");
         }
@@ -396,7 +401,8 @@ public class ServiceMetier {
         }
         
         l.setEtat(Livraison.Etat.livree);
-        l.setDateFin( Calendar.getInstance().getTime() );
+        l.setDateFin( date );
+        l.getLivreur().setLibre(true);
         
         JpaUtil.ouvrirTransaction();
         l = livraisonDAO.update(l);
@@ -408,5 +414,28 @@ public class ServiceMetier {
         return l;
         
     }
+    
+    public List<Livraison> findLivraisonParDrone() {
+        return livraisonDAO.findLivraisonEnCoursParDrone();
+    }
+    
+    public List<Client> findClientsEnAttenteDeLivraison() {
+        return clientDAO.findClientsAvecLivraisonEnCours();    
+    }
+    
+    public List<Client> findClientsInactifs() {
+        return clientDAO.findClientsInactifs();
+    }
+    
+    public List<Livreur> findLivreursOccupes() {
+        return livreurDAO.findNonLibres();
+    }
+    
+    public List<Livreur> findLivreursLibres() {
+        return livreurDAO.findLibres();
+    }
+    
+    
+    
     
 }

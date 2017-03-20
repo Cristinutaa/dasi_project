@@ -46,48 +46,32 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
             throw e;
         }
         return livreurs;
+    }      
+    
+    public List<Livreur> findLibres() {
+        List<Livreur> livreurs = new ArrayList<>();
+        try {
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE l.libre = :etat");
+            q.setParameter("etat", true);
+            livreurs = (List<Livreur>) q.getResultList();
+        }
+        catch(Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return livreurs;
     }
     
-    /**
-     * Trouver le meilleure livreur pour une commande
-     * @param l - la commande de client
-     * @return Livreur - le meilleur livreur pour cette commande
-     */
-    public Livreur findMeilleurLivreurPour( Livraison l ) {
-        
-        final Commande commande = l.getCommande();
-        
+    public List<Livreur> findNonLibres() {
+        List<Livreur> livreurs = new ArrayList<>();
         try {
-            List<Livreur> livreurs = findByChargeNecessaireEtLibre(commande.getPoids());
-            
-            if( livreurs.size() == 0 ) {
-                return null;
-            }
-            
-            Collections.sort(livreurs, new Comparator<Livreur>() {
-                
-                @Override
-                public int compare(Livreur o1, Livreur o2) {
-                    Double distanceO1 = o1.getDistance(o1.getLocation(), commande.getRestaurant().getPosition(), commande.getClient().getPoisition());
-                    Double distanceO2 = o2.getDistance(o2.getLocation(), commande.getRestaurant().getPosition(), commande.getClient().getPoisition());
-                    
-                    if( distanceO1 < distanceO2 ) {
-                        return -1;
-                    } else if ( distanceO1 == distanceO2 ) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-                    
-                }
-            });
-            
-            return null;
-            
-        } catch (Exception ex) {
-            return null;
+            Query q = em.createQuery("SELECT l FROM Livreur l WHERE l.libre = :etat");
+            q.setParameter("etat", false);
+            livreurs = (List<Livreur>) q.getResultList();
         }
-        
+        catch(Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return livreurs;
     }
  
     @Override

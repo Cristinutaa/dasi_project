@@ -122,27 +122,5 @@ public class LivreurTest {
         
     }
     
-    @Test
-    public void findMeilleurLivreurTest(){
-        LivreurDAO l = new LivreurDAO();
-        
-        LivreurDrone livreur = new LivreurDrone(2.5, 25, "3 avenue Albert Einstein, Villeurbanne, France ");
-        l.insert(livreur);
-        LivreurDrone livreur1 = new LivreurDrone(2.5, 50, "rue des rosiers, Paris, France ");
-        l.insert(livreur1);
-        
-        Livraison livrer = new Livraison(new Commande(new Client("Vasile", "Andornevici", "alala@yahoo.com", "Rue de la Republique, Lyon, France"), new Restaurant("Pizza", "Pizza Gratuite", "Cours Emille Zola, Villeurbanne France")));
-        try {
-            assertTrue(l.findMeilleurLivreurPour(livrer) == livreur);
-            l.remove(livreur);
-            l.remove(livreur1);  
-            assertFalse(l.findAll().contains(livreur));
-            assertFalse(l.findAll().contains(livreur1));
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-            Logger.getLogger(LivreurTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-     
-    }
+   
 }

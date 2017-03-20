@@ -1,6 +1,9 @@
 package com.gustatif.dasi_project.dao;
 
 import com.gustatif.dasi_project.metier.modele.Client;
+import com.gustatif.dasi_project.metier.modele.Livraison;
+import com.gustatif.dasi_project.metier.modele.Livreur;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
@@ -46,5 +49,37 @@ public class ClientDAO extends CRUDDAo<Client>{
         em.persist(c);
         return c;
     } 
+    
+    public List<Client> findClientsInactifs() {
+        Query query = em.createQuery(
+                    "Select c From Client c Where c not in ( Select Distinct(client) " +
+                    "From Livraison l Inner Join l.commande c Inner Join c.client client Where l.etat = :etat )", Client.class);
+        List<Client> clients = new ArrayList<>();
+         try {
+            clients = (List<Client>) query.setParameter("etat", Livraison.Etat.en_cours).getResultList();
+        }
+        catch(Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return new ArrayList<>();
+        
+    }
+    
+    public List<Client> findClientsAvecLivraisonEnCours() {
+        
+        Query query = em.createQuery(
+                    "Select Distinct(client) " +
+                    "From Livraison l Inner Join l.commande c Inner Join c.client client Where l.etat = :etat", Client.class);
+        List<Client> clients = new ArrayList<>();
+         try {
+            clients = (List<Client>) query.setParameter("etat", Livraison.Etat.en_cours).getResultList();
+        }
+        catch(Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return new ArrayList<>();
+    }
     
 }
