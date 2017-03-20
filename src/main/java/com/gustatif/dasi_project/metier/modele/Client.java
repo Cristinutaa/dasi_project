@@ -1,5 +1,6 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import com.google.maps.model.LatLng;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -63,6 +64,10 @@ public class Client extends Model implements Serializable {
         return this;
     }
 
+    public LatLng getPoisition() {
+        return new LatLng(latitude, longitude);
+    }
+    
     public Client setPrenom(String prenom) {
         this.prenom = prenom;
         return this;

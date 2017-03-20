@@ -1,5 +1,6 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import com.google.maps.model.LatLng;
 import com.gustatif.dasi_project.util.UrlPictureSearcher;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class Restaurant extends Model implements Serializable {
         return latitude;
     }
 
+    public LatLng getPosition() {
+        return new LatLng(latitude, longitude);
+    }
+    
     public List<Produit> getProduits() {
         return produits;
     }

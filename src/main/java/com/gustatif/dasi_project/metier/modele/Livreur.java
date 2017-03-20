@@ -8,12 +8,14 @@ package com.gustatif.dasi_project.metier.modele;
 import com.google.maps.model.LatLng;
 import com.gustatif.dasi_project.util.GeoTest;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -23,12 +25,6 @@ import javax.persistence.InheritanceType;
 @Entity
 public abstract class Livreur extends Model implements Serializable {
     
-    public enum Etat {
-        occupe,
-        libre,
-        inactif
-    }
-    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,7 +33,8 @@ public abstract class Livreur extends Model implements Serializable {
     private double chargeMaximale;
     private boolean libre = true;
     private String adresse_base;
-    private Etat etat;
+    @OneToMany(mappedBy = "livreur")
+    private List<Livraison> livraisons;
     
     public Livreur() {
     }
@@ -102,17 +99,17 @@ public abstract class Livreur extends Model implements Serializable {
     
     abstract public double getDistance(LatLng from, LatLng... steps);
 
-    public Etat getEtat() {
-        return etat;
-    }
-
-    public void setEtat(Etat etat) {
-        this.etat = etat;
-    }
-
     @Override
     public String toString() {
         return "Livreur{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + ", chargeMaximale=" + chargeMaximale + ", libre=" + libre + ", adresse_base=" + adresse_base + '}';
+    }
+
+    public List<Livraison> getLivraisons() {
+        return livraisons;
+    }
+
+    public void setLivraisons(List<Livraison> livraisons) {
+        this.livraisons = livraisons;
     }
 
     

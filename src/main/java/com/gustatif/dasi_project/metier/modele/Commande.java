@@ -41,6 +41,7 @@ public class Commande extends Model {
         this.client = client;
         this.restaurant = restaurant;
         this.lignesCommandes = new ArrayList<>();
+        this.etat = Etat.en_cours;
     }
 
     public long getId() {
@@ -91,6 +92,16 @@ public class Commande extends Model {
             poids += (double) ligneCommande.quantite * ligneCommande.getProduit().getPoids();
         }
         return poids;
+    }
+    
+    public double getPrixTotal() {
+        
+        double prixTotal = 0;
+        
+        for( LigneCommande ligneCommande : this.lignesCommandes ) {
+            prixTotal += (double) ligneCommande.quantite * ligneCommande.getProduit().getPrix();
+        }
+        return prixTotal;
     }
     
 }

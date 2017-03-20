@@ -2,8 +2,12 @@ package com.gustatif.dasi_project.dao;
 
 import com.gustatif.dasi_project.metier.modele.Client;
 import com.gustatif.dasi_project.metier.modele.Livraison;
+import com.gustatif.dasi_project.metier.modele.LivreurDrone;
+import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -44,6 +48,21 @@ public class LivraisonDAO extends CRUDDAo<Livraison> {
         }
         catch(Exception e) {}
         return livraisons;
+    }
+    
+    public List<Livraison> findLivreesParDrone() {
+        
+        List<Livraison> result = findNonLivrees();
+        
+        result.removeIf(new Predicate<Livraison>() {
+            @Override
+            public boolean test(Livraison t) {
+                return ( t.getLivreur() instanceof LivreurPersonne );
+            }
+        });
+        
+        return result;
+        
     }
     
 }

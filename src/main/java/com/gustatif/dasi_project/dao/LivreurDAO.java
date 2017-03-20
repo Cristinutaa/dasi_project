@@ -5,11 +5,17 @@
  */
 package com.gustatif.dasi_project.dao;
 
+import com.gustatif.dasi_project.metier.modele.Commande;
+import com.gustatif.dasi_project.metier.modele.Livraison;
 import com.gustatif.dasi_project.metier.modele.Livreur;
 import com.gustatif.dasi_project.metier.modele.LivreurDrone;
 import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -40,6 +46,43 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         }
         return livreurs;
     }
+    
+    public Livreur findMeilleurLivreurPour( Livraison l ) {
+        
+        final Commande commande = l.getCommande();
+        
+        try {
+            List<Livreur> livreurs = findByChargeNecessaireEtLibre(commande.getPoids());
+            
+            if( livreurs.size() == 0 ) {
+                return null;
+            }
+            
+            Collections.sort(livreurs, new Comparator<Livreur>() {
+                
+                @Override
+                public int compare(Livreur o1, Livreur o2) {
+                    Double distanceO1 = o1.getDistance(o1.getLocation(), commande.getRestaurant().getPosition(), commande.getClient().getPoisition());
+                    Double distanceO2 = o2.getDistance(o2.getLocation(), commande.getRestaurant().getPosition(), commande.getClient().getPoisition());
+                    
+                    if( distanceO1 < distanceO2 ) {
+                        return -1;
+                    } else if ( distanceO1 == distanceO2 ) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                    
+                }
+            });
+            
+            return null;
+            
+        } catch (Exception ex) {
+            return null;
+        }
+        
+    }
          
     
      public List<LivreurDrone> findByVitesse(double vitesse) throws Exception {
@@ -64,8 +107,7 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         // TODO
         return new ArrayList<>();
     }
-       
-
+    
     @Override
     protected Class<Livreur> getEntityClass() {
         return Livreur.class;

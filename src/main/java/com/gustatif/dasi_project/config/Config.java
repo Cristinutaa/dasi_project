@@ -11,7 +11,8 @@ package com.gustatif.dasi_project.config;
  */
 public class Config {
     
-    public static String ADMIN_MAIL = "gustatif@gustatif.com";
+    public static String DOMAIN_NAME = "gustatif.com";
+    public static String ADMIN_MAIL = "gustatif" + "@" + DOMAIN_NAME;
     public static String DEVELOPMENT_PERSISTENCE = "com.gustatif_dasi_persistance_unit_dev";
     public static String TEST_PERSISTENCE = "com.gustatif_dasi_persistance_unit_test";
     

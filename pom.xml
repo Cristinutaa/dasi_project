@@ -96,6 +96,11 @@
             <version>2.5.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.shick.jsoup</groupId>
+            <artifactId>jsoup-configuration-core</artifactId>
+            <version>1.0.3</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

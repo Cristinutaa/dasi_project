@@ -19,6 +19,8 @@ import com.gustatif.dasi_project.metier.modele.Client;
 import com.gustatif.dasi_project.metier.modele.Commande;
 import com.gustatif.dasi_project.metier.modele.LigneCommande;
 import com.gustatif.dasi_project.metier.modele.Livraison;
+import com.gustatif.dasi_project.metier.modele.Livreur;
+import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import com.gustatif.dasi_project.metier.modele.Produit;
 import com.gustatif.dasi_project.metier.modele.Restaurant;
 import com.gustatif.dasi_project.util.FakeMailer;
@@ -108,25 +110,13 @@ public class ServiceMetier {
             
             JpaUtil.validerTransaction();
             
-            FakeMailer.sendMail(
-                Config.ADMIN_MAIL, 
-                clientCree.getMail(), 
-                "Bienvenue chez Gustat'IF", 
-                "Bonjour "+ clientCree.getNom() + ", \n" +
-                "Nous vous confirmons votre inscription au service " +
-                " GUSTAT’IF. Votre numéro de client est: " + clientCree.getId());
+            ServiceTechnique.envoyerMailConfirmationInscription(clientCree);
             
         } catch(Exception e) {
             
             JpaUtil.annulerTransaction();
             
-            FakeMailer.sendMail(
-                Config.ADMIN_MAIL,
-                clientCree.getMail(), 
-                "Bienvenue chez Gustat'IF",
-                "Bonjour " + clientCree.getNom() + ", \n" +
-                "Votre inscription   au   service GUSTAT’IF" +
-                " a malencontreusement échoué...   Merci de recommencer ultérieurement.");
+            ServiceTechnique.envoyerMailEchecInscription(clientCree);
             
         }
         
@@ -244,7 +234,7 @@ public class ServiceMetier {
             throw new InvalidReferenceException("Le restaurant n'existe pas");
         }
         
-        Commande commande = new Commande(c, r);
+        Commande commande = new Commande(c, r); // Etat en cours
         JpaUtil.ouvrirTransaction();
         commande = commandeDAO.insert(commande);
         if(null == commande) {
@@ -253,6 +243,23 @@ public class ServiceMetier {
             JpaUtil.validerTransaction();
         }
         return commande;
+    }
+    
+    public boolean annulerCommande( Commande c ) {
+        
+        JpaUtil.ouvrirTransaction();
+        try {
+            
+            commandeDAO.remove(c);
+            JpaUtil.validerTransaction();
+            
+            return true;
+            
+        } catch ( Exception e ) {
+            JpaUtil.annulerTransaction();
+            return false;
+        }
+        
     }
     
     public Commande ajouterProduit( Commande c, Produit p ) throws InvalidReferenceException, InvalidActionException {
@@ -302,14 +309,22 @@ public class ServiceMetier {
         }
         
         boolean exist = false;
+        LigneCommande ligneASupprimee = null;
         for( LigneCommande ligneCommande : c.getLignesCommandes() ) {
             if( ligneCommande.getProduit().equals(p) ) {
                 if( ligneCommande.getQuantite() == 0 ) {
                     throw new InvalidActionException("Impossible d'enlever un produit dont la quantité est à 0");
                 }
                 ligneCommande.setQuantite(ligneCommande.getQuantite() - 1);
+                if( ligneCommande.getQuantite() == 0 ) {
+                    ligneASupprimee = ligneCommande;
+                }
                 exist = true;
             }
+        }
+        
+        if( null != ligneASupprimee ) {
+            c.getLignesCommandes().remove(ligneASupprimee);
         }
         
         if( !exist ) {
@@ -334,21 +349,35 @@ public class ServiceMetier {
             throw new InvalidReferenceException("La commande n'existe pas");
         }
         
-        Livraison l = c.valider();
+        Livraison livraison = c.valider();
+        Livreur livreur = livreurDAO.findMeilleurLivreurPour(livraison);
         
-        // TODO traitement sur la livraison (assignation);
+        if( null == livreur ) {
+            return null;
+        }
+        
+        c.setEtat(Commande.Etat.validee);
+        livraison.setLivreur(livreur);
+        livraison.setEtat(Livraison.Etat.en_cours);
+        livreur.getLivraisons().add(livraison);
         
         JpaUtil.ouvrirTransaction();
         
-        l = livraisonDAO.insert(l);
-        
-        if( null != l) {
+        livraison = livraisonDAO.insert(livraison);
+        Commande majCommande = commandeDAO.update(c);
+        Livreur majLivreur = livreurDAO.update(livreur);
+        if( null != livraison && null != majCommande && null != majLivreur ) {
             JpaUtil.validerTransaction();
+            
+            if( livreur instanceof LivreurPersonne ) {
+                ServiceTechnique.envoyerMailAssignationLivraison(livraison, ((LivreurPersonne)livreur));
+            }
+            
         } else {
             JpaUtil.annulerTransaction();
         }
         
-        return l;
+        return livraison;
         
     }
     
@@ -366,6 +395,7 @@ public class ServiceMetier {
             throw new InvalidActionException("La livraison a déjà été validée");
         }
         
+        l.setEtat(Livraison.Etat.livree);
         l.setDateFin( Calendar.getInstance().getTime() );
         
         JpaUtil.ouvrirTransaction();

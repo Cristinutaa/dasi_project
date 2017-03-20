@@ -6,6 +6,7 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
+import com.gustatif.dasi_project.config.Config;
 import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -66,6 +67,10 @@ public class LivreurPersonne extends Livreur{
     public double getDistance(LatLng from, LatLng... steps){
         GeoTest temp = new GeoTest(); 
         return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
+    }
+    
+    public String getMail() {
+        return this.prenom + "." + this.nom + "@" + Config.DOMAIN_NAME;
     }
     
 }

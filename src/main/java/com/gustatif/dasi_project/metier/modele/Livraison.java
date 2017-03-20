@@ -1,10 +1,13 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.SimpleFormatter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,7 +52,7 @@ public class Livraison extends Model {
 
     public Livraison(Commande commande) {
         this.commande = commande;
-        this.dateDebut = null;
+        this.dateDebut = Calendar.getInstance().getTime();
         this.dateFin = null;
         this.livreur = null;
         this.etat = Etat.non_attribuee;
@@ -97,6 +100,31 @@ public class Livraison extends Model {
 
     public void setLivreur(Livreur livreur) {
         this.livreur = livreur;
+    }
+    
+    public String toFormattedString() {
+        
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy 'à' hh'h'mm");
+        
+        StringBuilder strB = new StringBuilder();
+        
+        strB.append("Détails de la livraison \n");
+        strB.append(" * Date/Haure : " + format.format(dateDebut));
+        if( livreur instanceof LivreurPersonne) {
+            strB.append(" * Livreur : " + ((LivreurPersonne) livreur).getPrenom() + " " + ((LivreurPersonne) livreur).getNom() + "(n°"+ livreur.getId() +") \n"); 
+        }
+        strB.append(" * Client : \n");
+        strB.append("    " + commande.client.getPrenom() + " " + commande.client.getNom() + "\n");
+        strB.append("    " + commande.client.getAdresse() +"\n");
+        strB.append(" Commande : \n");
+        for( LigneCommande lc : commande.getLignesCommandes() ) {
+            strB.append(" * " + lc.getQuantite() + lc.getProduit().getDenomination() + " : " + lc.getQuantite() + " x " + lc.getProduit().getPrix() + "€\n");
+        }
+        
+        strB.append("TOTAL : " + commande.getPrixTotal() + "€");
+        
+        return strB.toString();
+        
     }
     
 }
