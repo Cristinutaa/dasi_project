@@ -1,5 +1,6 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import com.gustatif.dasi_project.util.UrlPictureSearcher;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +84,10 @@ public class Restaurant extends Model implements Serializable {
 
     public void setProduits(List<Produit> produits) {
         this.produits = produits;
+    }
+    
+    public String getPictureUrl() {
+        return UrlPictureSearcher.getUrlPictureForRestaurant(this.denomination);
     }
 
     @Override

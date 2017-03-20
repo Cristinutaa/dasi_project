@@ -5,6 +5,7 @@
  */
 package com.gustatif.dasi_project.util;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
@@ -21,6 +22,13 @@ public class Validator {
             return false;
         }
         return true;
+    }
+    
+    public static boolean CheckNotNullAndNotEmpty( Collection c ) {
+        if( null == c ) {
+            return false;
+        }
+        return !c.isEmpty();
     }
     
     public static boolean isMail( String s ) {

@@ -5,6 +5,8 @@
  */
 package com.gustatif.dasi_project.metier.modele;
 
+import com.google.maps.model.LatLng;
+import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -58,6 +60,12 @@ public class LivreurPersonne extends Livreur{
     @Override
     public String toString() {
         return "LivreurPersonne{" + "nom=" + nom + ", prenom=" + prenom + '}';
+    }
+
+    @Override
+    public double getDistance(LatLng from, LatLng... steps){
+        GeoTest temp = new GeoTest(); 
+        return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
     }
     
 }

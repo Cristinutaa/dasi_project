@@ -22,6 +22,13 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class Livreur extends Model implements Serializable {
+    
+    public enum Etat {
+        occupe,
+        libre,
+        inactif
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -30,6 +37,7 @@ public abstract class Livreur extends Model implements Serializable {
     private double chargeMaximale;
     private boolean libre = true;
     private String adresse_base;
+    private Etat etat;
     
     public Livreur() {
     }
@@ -92,9 +100,14 @@ public abstract class Livreur extends Model implements Serializable {
         this.adresse_base = adresse_base;
     }
     
-    public double getDistance(LatLng from, LatLng... steps){
-        GeoTest temp = new GeoTest(); 
-        return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
+    abstract public double getDistance(LatLng from, LatLng... steps);
+
+    public Etat getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Etat etat) {
+        this.etat = etat;
     }
 
     @Override

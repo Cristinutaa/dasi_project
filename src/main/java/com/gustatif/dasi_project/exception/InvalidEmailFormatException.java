@@ -9,6 +9,14 @@ package com.gustatif.dasi_project.exception;
  *
  * @author Loic
  */
-public class InvalidEmailFormatException {
-    
+public class InvalidEmailFormatException extends Exception {
+
+    public InvalidEmailFormatException( String msg ) {
+        super( msg );
+    }
+
+    public InvalidEmailFormatException( String msg, Throwable cause ) {
+        super( msg, cause );
+    }
+
 }

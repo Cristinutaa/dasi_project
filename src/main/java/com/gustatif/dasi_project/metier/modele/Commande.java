@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -31,6 +32,7 @@ public class Commande extends Model {
     @OneToOne
     protected Livraison livraison;
     
+    @OneToMany(mappedBy = "commande")
     protected List<LigneCommande> lignesCommandes;
     
     protected Commande() {}
@@ -79,6 +81,16 @@ public class Commande extends Model {
 
     public void setEtat(Etat etat) {
         this.etat = etat;
+    }
+    
+    public double getPoids() {
+        
+        double poids = 0;
+        
+        for( LigneCommande ligneCommande : this.lignesCommandes ) {
+            poids += (double) ligneCommande.quantite * ligneCommande.getProduit().getPoids();
+        }
+        return poids;
     }
     
 }

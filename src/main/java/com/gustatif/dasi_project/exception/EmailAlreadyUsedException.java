@@ -6,7 +6,8 @@
 package com.gustatif.dasi_project.exception;
 
 /**
- *
+ * Cette exception est levée à la création d'un utilisateur si un utilisateur utilisant la même adresse a déjà
+ * été enregistré dans la base de données.
  * @author rloic
  */
 public class EmailAlreadyUsedException extends Exception {

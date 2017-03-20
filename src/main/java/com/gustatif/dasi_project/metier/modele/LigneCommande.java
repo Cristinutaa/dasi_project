@@ -15,6 +15,7 @@ public class LigneCommande extends Model implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
     protected Commande commande = new Commande();
 
     @ManyToOne

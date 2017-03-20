@@ -38,7 +38,8 @@ abstract public class CRUDDAo<T extends Model> {
             t = (T) em.find(getEntityClass(), id);
         }
         catch(Exception e) {
-            throw e;
+            System.err.println(e.getMessage());
+            return null;
         }
         return t;
     }
@@ -50,7 +51,8 @@ abstract public class CRUDDAo<T extends Model> {
             models = (List<T>) q.getResultList();
         }
         catch(Exception e) {
-            throw e;
+            System.err.println(e.getMessage());
+            return new ArrayList<T>();
         }
         return models;
     }

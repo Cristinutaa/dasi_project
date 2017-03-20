@@ -13,6 +13,7 @@ import com.gustatif.dasi_project.exception.EmailAlreadyUsedException;
 import com.gustatif.dasi_project.exception.EmptyAttributeException;
 import com.gustatif.dasi_project.exception.InvalidActionException;
 import com.gustatif.dasi_project.exception.InvalidAddressException;
+import com.gustatif.dasi_project.exception.InvalidEmailFormatException;
 import com.gustatif.dasi_project.exception.InvalidReferenceException;
 import com.gustatif.dasi_project.metier.modele.Client;
 import com.gustatif.dasi_project.metier.modele.Commande;
@@ -54,6 +55,8 @@ public class ServiceMetier {
      * null ou vide
      * @throws InvalidAddressException Exception renvoyée si l'adresse fournie
      * n'a pas permis de calculer les coordonnées GPS du client
+     * @throws InvalidEmailFormatException Exception renvoyée si l'adresse e-mail
+     * a un format incorrect
      */
     public Client creerClient( 
             String nom, 
@@ -62,7 +65,8 @@ public class ServiceMetier {
             String adresse
     ) throws EmailAlreadyUsedException,
              EmptyAttributeException,
-             InvalidAddressException {
+             InvalidAddressException,
+             InvalidEmailFormatException {
         
         if( !Validator.CheckNotNullAndNotEmpty(nom) ) {
             throw new EmptyAttributeException("Le nom ne doit pas être vide");
@@ -74,6 +78,10 @@ public class ServiceMetier {
         
         if( !Validator.CheckNotNullAndNotEmpty(email) ) {
             throw new EmptyAttributeException("L'adresse mail ne doit pas être vide");
+        }
+        
+        if( !Validator.isMail(email) ) {
+            throw new InvalidEmailFormatException("L'adresse email n'est pas correcte");
         }
         
         if( !Validator.CheckNotNullAndNotEmpty(adresse) ) {
@@ -104,7 +112,7 @@ public class ServiceMetier {
                 Config.ADMIN_MAIL, 
                 clientCree.getMail(), 
                 "Bienvenue chez Gustat'IF", 
-                "Bonjour "+ clientCree.getMail() + ", \n" +
+                "Bonjour "+ clientCree.getNom() + ", \n" +
                 "Nous vous confirmons votre inscription au service " +
                 " GUSTAT’IF. Votre numéro de client est: " + clientCree.getId());
             
@@ -158,6 +166,39 @@ public class ServiceMetier {
         
     }
     
+    public Client findClientById( Long id ) {
+        
+        try {
+            return clientDAO.findById(id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        
+    }
+    
+    public Commande findCommandeById( Long id ) {
+        
+        try {
+            return commandeDAO.findById(id);
+        } catch ( Exception e ) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        
+    }
+    
+    public Produit findProduitById( Long id ) {
+        
+        try {
+            return produitDAO.findById(id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        
+    }
+    
     public List<Restaurant> findRestaurants() {
         
         try {
@@ -167,6 +208,18 @@ public class ServiceMetier {
         }
         return new ArrayList<>();
         
+    }
+    
+    public List<Restaurant> findRestaurantsByName( String name ) {
+        List<Restaurant> result = new ArrayList<>();
+        
+        try {
+            result = (List<Restaurant>) restaurantDAO.findAll();
+        } catch ( Exception e ) {
+            System.err.println(e.getMessage());
+        }
+        
+        return result;
     }
     
     public Restaurant findRestaurantById( Long id ) {
@@ -275,15 +328,25 @@ public class ServiceMetier {
         
     }
     
-    public Livraison validerCommande( Commande c ) {
+    public Livraison validerCommande( Commande c ) throws InvalidReferenceException {
         
-        Objects.requireNonNull(c, "La commande ne doit pas être null");
+        if( !commandeDAO.contains(c) ) {
+            throw new InvalidReferenceException("La commande n'existe pas");
+        }
         
         Livraison l = c.valider();
         
         // TODO traitement sur la livraison (assignation);
         
+        JpaUtil.ouvrirTransaction();
+        
         l = livraisonDAO.insert(l);
+        
+        if( null != l) {
+            JpaUtil.validerTransaction();
+        } else {
+            JpaUtil.annulerTransaction();
+        }
         
         return l;
         

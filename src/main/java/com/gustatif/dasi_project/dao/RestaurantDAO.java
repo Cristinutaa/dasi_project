@@ -18,8 +18,8 @@ public class RestaurantDAO extends CRUDDAo<Restaurant>{
     public List<Restaurant> findByName(String nom) throws Exception {
         List<Restaurant> restaurants = null;
         try {
-            Query q = em.createQuery("SELECT r FROM Restaurant r WHERE r.denomination = " + "'" + nom + "'");
-            restaurants = (List<Restaurant>) q.getResultList();
+            Query q = em.createQuery("SELECT r FROM Restaurant r WHERE r.denomination = :nom");
+            restaurants = (List<Restaurant>) q.setParameter("nom", nom + "%").getResultList();
         }
         catch(Exception e) {
             throw e;

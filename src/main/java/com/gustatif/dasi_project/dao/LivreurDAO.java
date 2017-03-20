@@ -8,6 +8,7 @@ package com.gustatif.dasi_project.dao;
 import com.gustatif.dasi_project.metier.modele.Livreur;
 import com.gustatif.dasi_project.metier.modele.LivreurDrone;
 import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -54,7 +55,15 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         return livreurs;
     }
      
+    public List<Livreur> findLibre() {
+        // TODO
+        return new ArrayList<>();
+    }
     
+    public List<Livreur> findNonLibre() {
+        // TODO
+        return new ArrayList<>();
+    }
        
 
     @Override

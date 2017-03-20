@@ -43,7 +43,7 @@ public class ValidatorTest {
     @Test
     public void emptyAttributeTest() {
         
-        assertFalse("Null must return false", Validator.CheckNotNullAndNotEmpty(null));
+        assertFalse("Null must return false", Validator.CheckNotNullAndNotEmpty((String)null));
         assertFalse("'' must return false", Validator.CheckNotNullAndNotEmpty(""));
         assertTrue("j must return true", Validator.CheckNotNullAndNotEmpty("j"));
         

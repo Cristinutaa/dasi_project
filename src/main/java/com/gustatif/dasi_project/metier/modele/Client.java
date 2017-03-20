@@ -11,7 +11,7 @@ import javax.persistence.NamedQuery;
 public class Client extends Model implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id = 0l;
     private String nom;
     private String prenom;
     private String mail;

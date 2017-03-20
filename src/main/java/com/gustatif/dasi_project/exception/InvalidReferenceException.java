@@ -6,7 +6,8 @@
 package com.gustatif.dasi_project.exception;
 
 /**
- *
+ * Une InvalidReferenceException peut être levée si l'utilisateur essaie de faire appel à des objets
+ * qui n'existent pas dans la base de données.
  * @author Loic
  */
 public class InvalidReferenceException extends Exception {
