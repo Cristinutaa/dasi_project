@@ -24,6 +24,9 @@ public class LivreurDrone extends Livreur {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    /**
+     * La vitesse moyenne de la drone
+     */
     private double vitesseMoyenne;
 
     public LivreurDrone() {
