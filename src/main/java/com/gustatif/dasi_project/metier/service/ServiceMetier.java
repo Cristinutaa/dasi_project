@@ -360,6 +360,7 @@ public class ServiceMetier {
         livraison.setLivreur(livreur);
         livraison.setEtat(Livraison.Etat.en_cours);
         livreur.getLivraisons().add(livraison);
+        livreur.setLibre(false);
         
         JpaUtil.ouvrirTransaction();
         
@@ -397,6 +398,7 @@ public class ServiceMetier {
         
         l.setEtat(Livraison.Etat.livree);
         l.setDateFin( Calendar.getInstance().getTime() );
+        l.getLivreur().setLibre(true);
         
         JpaUtil.ouvrirTransaction();
         l = livraisonDAO.update(l);
