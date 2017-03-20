@@ -7,6 +7,7 @@ package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
 import com.gustatif.dasi_project.util.GeoTest;
+import static com.gustatif.dasi_project.util.GeoTest.getLatLng;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import javax.persistence.OneToMany;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class Livreur extends Model implements Serializable {
-    
+   
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -42,8 +43,9 @@ public abstract class Livreur extends Model implements Serializable {
     public Livreur(double charge_maximale, String adresse_base) {
         this.chargeMaximale = charge_maximale;
         this.adresse_base = adresse_base;
+       
     }
-    
+       
     public Long getId() {
         return id;
     }
@@ -97,6 +99,12 @@ public abstract class Livreur extends Model implements Serializable {
         this.adresse_base = adresse_base;
     }
     
+    /**
+     * Calculer la distance entre le livreur et le client en minutes
+     * @param from - les coordonnees de client
+     * @param steps - La liste des passages obligées
+     * @return la valeur de la distance en minutes
+     */
     abstract public double getDistance(LatLng from, LatLng... steps);
 
     @Override

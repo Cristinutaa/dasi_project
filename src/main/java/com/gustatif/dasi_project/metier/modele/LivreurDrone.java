@@ -6,6 +6,7 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
+import com.google.maps.model.TravelMode;
 import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,9 +47,17 @@ public class LivreurDrone extends Livreur {
         this.vitesseMoyenne = vitesseMoyenne;
     }
     
-     public double getDistance(LatLng from, LatLng... steps){
+    /*
+        Explications dans la classe Livreur
+    */
+    @Override
+    public double getDistance(LatLng from, LatLng... steps){
         GeoTest temp = new GeoTest(); 
-        return temp.getFlightDistanceInKm(this.getLocation(), from);
+        if (vitesseMoyenne == 0){
+            return  Double.MAX_VALUE;
+        }
+        double distance = temp.getTripDurationOrDistance(TravelMode.UNKNOWN, false, this.getLocation(), from, steps)/(vitesseMoyenne/60);
+        return distance;
     }
 
     @Override

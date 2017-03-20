@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.gustatif.dasi_project.dao;
 
 import com.gustatif.dasi_project.metier.modele.Commande;
@@ -33,7 +29,12 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         super(em);
     }
         
-     
+    /**
+     * Chercher les livreurs qui peuvent deplacer le poids passé en parametre et qui sont libre au moment 
+     * @param poids - le poids des produits de la livraison
+     * @return List<Livreur> - la liste des livreurs 
+     * @throws Exception - Exception de connexion
+     */ 
     public List<Livreur> findByChargeNecessaireEtLibre(double poids) throws Exception {
         List<Livreur> livreurs = null;
         try {
@@ -47,6 +48,11 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         return livreurs;
     }
     
+    /**
+     * Trouver le meilleure livreur pour une commande
+     * @param l - la commande de client
+     * @return Livreur - le meilleur livreur pour cette commande
+     */
     public Livreur findMeilleurLivreurPour( Livraison l ) {
         
         final Commande commande = l.getCommande();
@@ -83,31 +89,7 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         }
         
     }
-         
-    
-     public List<LivreurDrone> findByVitesse(double vitesse) throws Exception {
-        List<LivreurDrone> livreurs = null;
-        try {
-            Query q = em.createQuery("SELECT l FROM LivreurDrone l WHERE l.vitesseMoyenne = :vitesse");
-            q.setParameter("vitesse", vitesse);
-            livreurs = (List<LivreurDrone>) q.getResultList();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-        return livreurs;
-    }
-     
-    public List<Livreur> findLibre() {
-        // TODO
-        return new ArrayList<>();
-    }
-    
-    public List<Livreur> findNonLibre() {
-        // TODO
-        return new ArrayList<>();
-    }
-    
+ 
     @Override
     protected Class<Livreur> getEntityClass() {
         return Livreur.class;

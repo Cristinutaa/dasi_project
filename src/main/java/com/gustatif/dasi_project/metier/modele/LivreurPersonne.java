@@ -62,7 +62,10 @@ public class LivreurPersonne extends Livreur{
     public String toString() {
         return "LivreurPersonne{" + "nom=" + nom + ", prenom=" + prenom + '}';
     }
-
+    
+     /*
+        Explications dans la classe Livreur
+    */
     @Override
     public double getDistance(LatLng from, LatLng... steps){
         GeoTest temp = new GeoTest(); 
