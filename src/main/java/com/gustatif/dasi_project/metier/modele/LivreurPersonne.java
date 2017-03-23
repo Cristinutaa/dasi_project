@@ -13,10 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- *
- * @author carhiliuc
- */
+
 @Entity
 public class LivreurPersonne extends Livreur{
     
@@ -24,7 +21,14 @@ public class LivreurPersonne extends Livreur{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    /**
+     * Le nom de la personne
+     */
     private String nom;
+    
+    /**
+     * Le prenom de la personne
+     */
     private String prenom;
 
     public LivreurPersonne() {
@@ -63,15 +67,7 @@ public class LivreurPersonne extends Livreur{
         return "LivreurPersonne{" + "nom=" + nom + ", prenom=" + prenom + '}';
     }
     
-     /*
-        Explications dans la classe Livreur
-    */
-    @Override
-    public double getDistance(LatLng from, LatLng... steps){
-        GeoTest temp = new GeoTest(); 
-        return temp.getTripDurationByBicycleInMinute(this.getLocation(), from, steps);
-    }
-    
+   
     public String getMail() {
         return this.prenom + "." + this.nom + "@" + Config.DOMAIN_NAME;
     }

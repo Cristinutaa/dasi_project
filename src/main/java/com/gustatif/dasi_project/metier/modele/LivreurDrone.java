@@ -24,6 +24,9 @@ public class LivreurDrone extends Livreur {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    /**
+     * La vitesse moyenne de la drone
+     */
     private double vitesseMoyenne;
 
     public LivreurDrone() {
@@ -47,19 +50,6 @@ public class LivreurDrone extends Livreur {
         this.vitesseMoyenne = vitesseMoyenne;
     }
     
-    /*
-        Explications dans la classe Livreur
-    */
-    @Override
-    public double getDistance(LatLng from, LatLng... steps){
-        GeoTest temp = new GeoTest(); 
-        if (vitesseMoyenne == 0){
-            return  Double.MAX_VALUE;
-        }
-        double distance = temp.getTripDurationOrDistance(TravelMode.UNKNOWN, false, this.getLocation(), from, steps)/(vitesseMoyenne/60);
-        return distance;
-    }
-
     @Override
     public String toString() {
         return "LivreurDrone{" + "vitesseMoyenne=" + vitesseMoyenne + '}';

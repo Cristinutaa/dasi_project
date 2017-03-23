@@ -28,9 +28,21 @@ public abstract class Livreur extends Model implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    /**
+     * La longitude de la position de livreur
+     */
     private double longitude;
+    /**
+     * La latitude de la position de livreur
+     */
     private double latitude;
+    /**
+     * La charge maximale que peut être portée par le livreur
+     */
     private double chargeMaximale;
+    /**
+     * Le statut de livreur: libre ou occupé
+     */
     private boolean libre = true;
     private String adresseBase;
     @OneToMany(mappedBy = "livreur")
@@ -56,7 +68,11 @@ public abstract class Livreur extends Model implements Serializable {
     public double getLatitude() {
         return latitude;
     }
-
+    
+    /**
+     * Renvoie les coordonnées de livreur dans le format LatLng
+     * @return LatLng - les coordonnées de livreur
+     */
     public LatLng getLocation() {
         return new LatLng(latitude,longitude);
     }
@@ -98,13 +114,6 @@ public abstract class Livreur extends Model implements Serializable {
         this.adresseBase = adresse_base;
     }
     
-    /**
-     * Calculer la distance entre le livreur et le client en minutes
-     * @param from - les coordonnees de client
-     * @param steps - La liste des passages obligées
-     * @return la valeur de la distance en minutes
-     */
-    abstract public double getDistance(LatLng from, LatLng... steps);
 
     @Override
     public String toString() {
