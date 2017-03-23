@@ -2,8 +2,6 @@ package com.gustatif.dasi_project.dao;
 
 import com.gustatif.dasi_project.metier.modele.Client;
 import com.gustatif.dasi_project.metier.modele.Livraison;
-import com.gustatif.dasi_project.metier.modele.LivreurDrone;
-import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -25,34 +23,11 @@ public class LivraisonDAO extends CRUDDAo<Livraison> {
         return Livraison.class;
     }
 
-    public List<Livraison> findByClient( Client client ) {
-        return new ArrayList<>();
-    }
-    
-    public Livraison findLastOfClient( Client client ) {
-        Livraison l = null;
-        try {
-            Query q = em.createQuery("Select l From Livraison l where livraison.client = :client OrderBy livraison.dateDebut DESC");
-            l = (Livraison) q.getSingleResult();
-        } catch( Exception e ) {}
-        return l;
-    }
-    
-    public List<Livraison> findNonLivrees() {
-        List<Livraison> livraisons = new ArrayList<>();
-        try {
-            Query q = em.createQuery("SELECT l From Livraison l where livraison.livree = FALSE");
-            livraisons = (List<Livraison>) q.getResultList();
-        }
-        catch(Exception e) {}
-        return livraisons;
-    }
-    
-    public List<Livraison> findLivraisonEnCoursParDrone() {
+    public List<Livraison> findLivraisonsParDrone() {
         
         List<Livraison> livraisons = new ArrayList<>();
         try {
-            Query q = em.createQuery("SELECT l From Livraison l where livraison.livree = FALSE and livraison.livreur in (Select li From LivreurDrone li)");
+            Query q = em.createQuery("SELECT l From Livraison l where l.livreur in (Select li From LivreurDrone li)");
             livraisons = (List<Livraison>) q.getResultList();
         }
         catch(Exception e) {}

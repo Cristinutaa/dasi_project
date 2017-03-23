@@ -1,7 +1,5 @@
 package com.gustatif.dasi_project.metier.service;
 
-import com.google.maps.model.LatLng;
-import com.gustatif.dasi_project.config.Config;
 import com.gustatif.dasi_project.dao.ClientDAO;
 import com.gustatif.dasi_project.dao.CommandeDAO;
 import com.gustatif.dasi_project.dao.JpaUtil;
@@ -23,14 +21,11 @@ import com.gustatif.dasi_project.metier.modele.Livreur;
 import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import com.gustatif.dasi_project.metier.modele.Produit;
 import com.gustatif.dasi_project.metier.modele.Restaurant;
-import com.gustatif.dasi_project.util.FakeMailer;
-import com.gustatif.dasi_project.util.GeoTest;
 import com.gustatif.dasi_project.util.Validator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.NoResultException;
 
 public class ServiceMetier {
@@ -109,10 +104,12 @@ public class ServiceMetier {
             
             ServiceTechnique.envoyerMailConfirmationInscription(clientCree);
             
-        } catch(Exception e) {
-            
+        } catch (EmailAlreadyUsedException e) {
+            throw e;
+        }
+        catch(Exception e) {
+            System.err.println(e.getMessage());
             JpaUtil.annulerTransaction();
-            
             ServiceTechnique.envoyerMailEchecInscription(clientCree);
             
         }
@@ -259,6 +256,16 @@ public class ServiceMetier {
         
     }
     
+    public List<String> getPictureUrlOf( List<Restaurant> restaurants ) {
+        List<String> result = new ArrayList<>();
+        
+        for( Restaurant r : restaurants ) {
+            result.add(ServiceTechnique.getUrlPictureOf(r));
+        }
+        
+        return result;
+    }
+        
     public Commande ajouterProduit( Commande c, Produit p ) throws InvalidReferenceException, InvalidActionException {
         
         if( !commandeDAO.contains(c) ) {
@@ -269,7 +276,7 @@ public class ServiceMetier {
             throw new InvalidReferenceException("Le produit n'existe pas dans la base de données");
         }
         
-        if( !p.getRestaurant().equals(c.getRestaurant()) ) {
+        if( !c.getRestaurant().getProduits().contains(p) ) {
             throw new InvalidActionException("Impossible d'ajouter un produit qui n'appartient pas au restaurant lié à la commande");
         }
         boolean exist = false;
@@ -340,13 +347,16 @@ public class ServiceMetier {
         
     }
     
-    public Livraison validerCommande( Commande c ) throws InvalidReferenceException {
+    public Livraison validerCommande( Commande c ) throws InvalidReferenceException, InvalidActionException {
         
         if( !commandeDAO.contains(c) ) {
             throw new InvalidReferenceException("La commande n'existe pas");
         }
         
         Livraison livraison = c.valider();
+        if( null == livraison ) {
+            throw new InvalidActionException("Il n'est pas possible de valider une commande vide");
+        }
         Livreur livreur = ServiceTechnique.findMeilleurLivreurPour(livreurDAO, livraison);
         
         if( null == livreur ) {
@@ -385,6 +395,12 @@ public class ServiceMetier {
         return validerLivraison(l, Calendar.getInstance().getTime());
         
     }
+
+    public Livreur findLivreurById( Long id ) {
+
+        return livreurDAO.findById(id);
+
+    }
     
     public Livraison validerLivraison( Livraison l, Date date ) throws InvalidReferenceException, InvalidActionException {
         
@@ -398,6 +414,10 @@ public class ServiceMetier {
         
         if( null != l.getDateFin() ) {
             throw new InvalidActionException("La livraison a déjà été validée");
+        }
+
+        if( date.compareTo( l.getDateDebut() ) <= 0 ) {
+            throw new InvalidActionException("La date de validation doit être postérieure à la date de début de livraison");
         }
         
         l.setEtat(Livraison.Etat.livree);
@@ -415,8 +435,8 @@ public class ServiceMetier {
         
     }
     
-    public List<Livraison> findLivraisonParDrone() {
-        return livraisonDAO.findLivraisonEnCoursParDrone();
+    public List<Livraison> findLivraisonsParDrone() {
+        return livraisonDAO.findLivraisonsParDrone();
     }
     
     public List<Client> findClientsEnAttenteDeLivraison() {

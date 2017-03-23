@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class Restaurant extends Model implements Serializable {
     private Double longitude;
     private Double latitude;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany
     private List<Produit> produits;
     
     protected Restaurant() {
@@ -89,10 +90,6 @@ public class Restaurant extends Model implements Serializable {
 
     public void setProduits(List<Produit> produits) {
         this.produits = produits;
-    }
-    
-    public String getPictureUrl() {
-        return UrlPictureSearcher.getUrlPictureForRestaurant(this.denomination);
     }
 
     @Override

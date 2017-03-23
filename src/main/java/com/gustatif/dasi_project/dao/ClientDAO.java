@@ -34,9 +34,8 @@ public class ClientDAO extends CRUDDAo<Client>{
             client = (Client) findByEmailQuery.setParameter("email", email).getSingleResult();
         } catch( NoResultException noResult ) {
             return null;
-        }
-        catch(Exception e) {
-            throw e;
+        } catch(Exception e) {
+            System.err.println(e);
         }
         return client;
     }
@@ -53,7 +52,10 @@ public class ClientDAO extends CRUDDAo<Client>{
     public List<Client> findClientsInactifs() {
         Query query = em.createQuery(
                     "Select c From Client c Where c not in ( Select Distinct(client) " +
-                    "From Livraison l Inner Join l.commande c Inner Join c.client client Where l.etat = :etat )", Client.class);
+                            "From Client client " +
+                            "Left Join Commande commande " +
+                            "Left Join Livraison livraison " +
+                            "Where livraison.etat = :etat and commande.client = client and livraison.commande = commande ) ", Client.class);
         List<Client> clients = new ArrayList<>();
          try {
             clients = (List<Client>) query.setParameter("etat", Livraison.Etat.en_cours).getResultList();
@@ -62,7 +64,7 @@ public class ClientDAO extends CRUDDAo<Client>{
             System.err.println(e.getMessage());
         }
         
-        return new ArrayList<>();
+        return clients;
         
     }
     
@@ -70,7 +72,10 @@ public class ClientDAO extends CRUDDAo<Client>{
         
         Query query = em.createQuery(
                     "Select Distinct(client) " +
-                    "From Livraison l Inner Join l.commande c Inner Join c.client client Where l.etat = :etat", Client.class);
+                      "From Client client " +
+                      "Left Join Commande commande " +
+                      "Left Join Livraison livraison " +
+                      "Where livraison.etat = :etat and commande.client = client and livraison.commande = commande", Client.class);
         List<Client> clients = new ArrayList<>();
          try {
             clients = (List<Client>) query.setParameter("etat", Livraison.Etat.en_cours).getResultList();
@@ -79,7 +84,7 @@ public class ClientDAO extends CRUDDAo<Client>{
             System.err.println(e.getMessage());
         }
         
-        return new ArrayList<>();
+        return clients;
     }
     
 }

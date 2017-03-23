@@ -4,13 +4,13 @@ import com.gustatif.dasi_project.metier.modele.LigneCommande;
 import javax.persistence.EntityManager;
 
 
-public class LigneLivraisonDAO extends CRUDDAo<LigneCommande> {
+public class LigneCommandeDAO extends CRUDDAo<LigneCommande> {
 
-    public LigneLivraisonDAO() {
+    public LigneCommandeDAO() {
         super();
     }
     
-    public LigneLivraisonDAO(EntityManager em) {
+    public LigneCommandeDAO(EntityManager em) {
         super(em);
     }
 

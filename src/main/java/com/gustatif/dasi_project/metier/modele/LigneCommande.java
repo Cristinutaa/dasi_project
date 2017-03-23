@@ -60,7 +60,9 @@ public class LigneCommande extends Model implements Serializable {
     public void setQuantite(Integer quantite) {
         this.quantite = quantite;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "LigneCommande{" + "produit=" + produit.getDenomination() +" x " + quantite +'}';
+    }
 }

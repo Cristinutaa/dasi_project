@@ -6,9 +6,8 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
-import com.gustatif.dasi_project.util.GeoTest;
-import static com.gustatif.dasi_project.util.GeoTest.getLatLng;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,16 +32,16 @@ public abstract class Livreur extends Model implements Serializable {
     private double latitude;
     private double chargeMaximale;
     private boolean libre = true;
-    private String adresse_base;
+    private String adresseBase;
     @OneToMany(mappedBy = "livreur")
-    private List<Livraison> livraisons;
+    private List<Livraison> livraisons = new ArrayList<>();
     
     public Livreur() {
     }
 
     public Livreur(double charge_maximale, String adresse_base) {
         this.chargeMaximale = charge_maximale;
-        this.adresse_base = adresse_base;
+        this.adresseBase = adresse_base;
        
     }
        
@@ -70,8 +69,8 @@ public abstract class Livreur extends Model implements Serializable {
         return libre;
     }
 
-    public String getAdresse_base() {
-        return adresse_base;
+    public String getAdresseBase() {
+        return adresseBase;
     }
 
     public void setLongitude(double longitude) {
@@ -87,7 +86,7 @@ public abstract class Livreur extends Model implements Serializable {
         this.latitude = location.lat;
     }
 
-    public void setCharge_maximale(double chargeMaximale) {
+    public void setChargeMaximale(double chargeMaximale) {
         this.chargeMaximale = chargeMaximale;
     }
 
@@ -95,8 +94,8 @@ public abstract class Livreur extends Model implements Serializable {
         this.libre = libre;
     }
 
-    public void setAdresse_base(String adresse_base) {
-        this.adresse_base = adresse_base;
+    public void setAdresseBase(String adresse_base) {
+        this.adresseBase = adresse_base;
     }
     
     /**
@@ -109,7 +108,7 @@ public abstract class Livreur extends Model implements Serializable {
 
     @Override
     public String toString() {
-        return "Livreur{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + ", chargeMaximale=" + chargeMaximale + ", libre=" + libre + ", adresse_base=" + adresse_base + '}';
+        return "Livreur{" + "id=" + id + ", longitude=" + longitude + ", latitude=" + latitude + ", chargeMaximale=" + chargeMaximale + ", libre=" + libre + ", adresse_base=" + adresseBase + '}';
     }
 
     public List<Livraison> getLivraisons() {

@@ -2,10 +2,12 @@ package com.gustatif.dasi_project.metier.modele;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -19,9 +21,6 @@ public class Produit extends Model implements Serializable {
     private String description;
     private Double poids;
     private Double prix;
-    
-    @ManyToOne
-    private Restaurant restaurant;
 
     public Produit() {
     }
@@ -67,14 +66,6 @@ public class Produit extends Model implements Serializable {
 
     public void setPrix(Double prix) {
         this.prix = prix;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 
     @Override

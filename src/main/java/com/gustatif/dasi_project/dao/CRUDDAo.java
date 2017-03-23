@@ -6,16 +6,32 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+/**
+ * CRUDDAo implémente les fonctions de base
+ * @author Loic
+ * @param <T> Le type de modèle
+ */
 abstract public class CRUDDAo<T extends Model> {
     
     protected EntityManager em;
     
+    /**
+     * Renvoie le nom de classe renvoyé par le DAO
+     * @return Class<T> Le nom de la classe de T
+     */
     abstract protected Class<T> getEntityClass();
     
+    /**
+     * Crée un CRUDDao avec l'entity manager em
+     * @param em L'entity manager a utilisé par le DAO
+     */
     public CRUDDAo( EntityManager em ) {
         this.em = em;
     }
     
+    /**
+     * Créer un CRUDDAO avec l'enity manager par defaut
+     */
     public CRUDDAo() {
         this.em = JpaUtil.obtenirEntityManager();
         if( null == this.em ) {
@@ -23,16 +39,32 @@ abstract public class CRUDDAo<T extends Model> {
         }
     }
     
+    /**
+     * Persiste l'object e
+     * @param e L'objet a persister
+     * @return T L'objet qui a été persisté
+     */
     public T insert( T e ) {
         em.persist(e);
+        em.flush();
         return e;
     }
    
+    /**
+     * Met à jour l'objet e
+     * @param e L'objet à mettre à jour
+     * @return T L'objet qui a été mis à jour
+     */
     public T update( T e ) {
         return (T) em.merge(e);
     }
     
-    public T findById(long id) throws Exception {
+    /**
+     * Renvoie l'objet ayant l'id 'id'. Si aucun objet n'est trouvé, renvoie null
+     * @param id L'identifiant unique de l'objet
+     * @return T/null
+     */
+    public T findById(long id) {
         T t = null;
         try {
             t = (T) em.find(getEntityClass(), id);
@@ -44,7 +76,12 @@ abstract public class CRUDDAo<T extends Model> {
         return t;
     }
     
-    public List<T> findAll() throws Exception {
+    /**
+     * Renvoie la liste des objets
+     * @return List<T>
+     * @throws Exception 
+     */
+    public List<T> findAll() {
         List<T> models = new ArrayList<>();
         try {
             Query q = em.createQuery("SELECT m FROM " + getEntityClass().getSimpleName() + " m");
@@ -57,10 +94,19 @@ abstract public class CRUDDAo<T extends Model> {
         return models;
     }
     
+    /**
+     * Supprime l'élément e de la base de persistance
+     * @param e L'élément à supprimer
+     */
     public void remove( T e ) {
         em.remove(e);
     }
     
+    /**
+     * Renvoie si l'élément de persistance contient l'élément e
+     * @param e L'élement dont on doit vérifier la présence
+     * @return boolean
+     */
     public boolean contains( T e ) {
         
         if( null == e) {

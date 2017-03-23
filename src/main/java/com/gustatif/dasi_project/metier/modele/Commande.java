@@ -1,5 +1,6 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -12,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Commande extends Model {
+public class Commande extends Model implements Serializable {
     
     public enum Etat {
         en_cours,
@@ -74,6 +75,22 @@ public class Commande extends Model {
     }
     
     public Livraison valider() {
+        if( this.lignesCommandes.isEmpty() ) {
+            return null;
+        }
+
+        boolean containsProduct = false;
+        for( LigneCommande l : lignesCommandes ) {
+            if( l.getQuantite() > 0 ) {
+                containsProduct = true;
+                break;
+            }
+        }
+
+        if(!containsProduct) {
+            return null;
+        }
+
         return new Livraison( this );
     }
 
@@ -104,5 +121,12 @@ public class Commande extends Model {
         }
         return prixTotal;
     }
+
+    @Override
+    public String toString() {
+        return "Commande{" + "id=" + id + ", client=" + client + ", restaurant=" + restaurant + ", etat=" + etat + ", livraison=" + livraison + ", lignesCommandes=" + lignesCommandes + '}';
+    }
+    
+    
     
 }

@@ -1,5 +1,6 @@
 package com.gustatif.dasi_project.metier.modele;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +22,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
-public class Livraison extends Model {
+public class Livraison extends Model implements Serializable {
     
     public enum Etat {
         non_attribuee,
@@ -101,30 +102,17 @@ public class Livraison extends Model {
     public void setLivreur(Livreur livreur) {
         this.livreur = livreur;
     }
-    
-    public String toFormattedString() {
-        
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy 'à' hh'h'mm");
-        
-        StringBuilder strB = new StringBuilder();
-        
-        strB.append("Détails de la livraison \n");
-        strB.append(" * Date/Haure : " + format.format(dateDebut));
-        if( livreur instanceof LivreurPersonne) {
-            strB.append(" * Livreur : " + ((LivreurPersonne) livreur).getPrenom() + " " + ((LivreurPersonne) livreur).getNom() + "(n°"+ livreur.getId() +") \n"); 
-        }
-        strB.append(" * Client : \n");
-        strB.append("    " + commande.client.getPrenom() + " " + commande.client.getNom() + "\n");
-        strB.append("    " + commande.client.getAdresse() +"\n");
-        strB.append(" Commande : \n");
-        for( LigneCommande lc : commande.getLignesCommandes() ) {
-            strB.append(" * " + lc.getQuantite() + lc.getProduit().getDenomination() + " : " + lc.getQuantite() + " x " + lc.getProduit().getPrix() + "€\n");
-        }
-        
-        strB.append("TOTAL : " + commande.getPrixTotal() + "€");
-        
-        return strB.toString();
-        
+
+    @Override
+    public String toString() {
+        return "Livraison{" +
+                "id=" + id +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", commande=" + commande +
+                ", etat=" + etat +
+                ", livreur=" + livreur +
+                '}';
     }
-    
+
 }
