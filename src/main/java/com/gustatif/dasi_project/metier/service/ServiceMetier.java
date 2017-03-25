@@ -357,6 +357,8 @@ public class ServiceMetier {
         if( null == livraison ) {
             throw new InvalidActionException("Il n'est pas possible de valider une commande vide");
         }
+        
+        JpaUtil.ouvrirTransaction();
         Livreur livreur = ServiceTechnique.findMeilleurLivreurPour(livreurDAO, livraison);
         
         if( null == livreur ) {
@@ -369,7 +371,6 @@ public class ServiceMetier {
         livreur.getLivraisons().add(livraison);
         livreur.setLibre(false);
         
-        JpaUtil.ouvrirTransaction();
         //-------------------------------------
         livraison = livraisonDAO.insert(livraison);
         Commande majCommande = commandeDAO.update(c);
