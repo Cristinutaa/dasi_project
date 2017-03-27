@@ -35,7 +35,7 @@ public class MainModerateur {
         System.out.println("");
         System.out.println("*************************************************");
 
-        String option = Saisie.lireChaine("Voulez-vous confirmer une livraison de drone ? (o/n", Arrays.asList("o", "n"));
+        String option = Saisie.lireChaine("Voulez-vous confirmer une livraison de drone ? (o/n)", Arrays.asList("o", "n"));
 
         if( "n".equals(option) ) {
             return;
