@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gustatif.dasi_project.config;
 
 /**
- *
+ * Classe de configuration de l'application
  * @author rloic
  */
 public class Config {
@@ -30,5 +25,10 @@ public class Config {
      * Unite de persistence de test
      */
     public static String TEST_PERSISTENCE = "com.gustatif_dasi_persistance_unit_test";
+    
+    /**
+     * Url de l'image par défaut pour les restaurants
+     */
+    public static String DEFAULT_RESTAURANT_PICTURE_URL = "";
     
 }

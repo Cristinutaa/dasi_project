@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gustatif.dasi_project.exception;
 
 /**
@@ -12,10 +7,19 @@ package com.gustatif.dasi_project.exception;
  */
 public class InvalidReferenceException extends Exception {
     
+    /**
+     * Constructeur avec spécification du message à afficher
+     * @param msg Le message donnée par l'exception
+     */
     public InvalidReferenceException( String msg ) {
         super( msg );
     }
     
+    /**
+     * Constructeur avec message et cause ayant produit l'exception
+     * @param msg Le message à afficher
+     * @param cause La cause de l'exception
+     */
     public InvalidReferenceException(String msg, Throwable cause) {
         super( msg, cause );
     }

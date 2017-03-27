@@ -150,6 +150,12 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie le client identifié par l'id "id". Si aucun Client ne
+     * correspond renvoie null
+     * @param id L'identifiant du client
+     * @return Client|null
+     */
     public Client findClientById( Long id ) {
         
         try {
@@ -161,6 +167,12 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie la Commande identifié par l'id "id". Si aucun Commande ne
+     * correspond renvoie null
+     * @param id L'identifiant de la Commande
+     * @return Commande|null
+     */
     public Commande findCommandeById( Long id ) {
         
         try {
@@ -172,6 +184,12 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie le Produit identifié par l'id "id". Si aucun Produit ne
+     * correspond renvoie null
+     * @param id L'identifiant du Produit
+     * @return Produit|null
+     */
     public Produit findProduitById( Long id ) {
         
         try {
@@ -183,6 +201,10 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie la liste des Restaurant
+     * @return List<Restaurant>
+     */
     public List<Restaurant> findAllRestaurants() {
         
         try {
@@ -194,6 +216,11 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie la liste des Restaurant dont le nom commence par "name"
+     * @param name Le nom du restaurant cherché
+     * @return List<Restaurant>
+     */
     public List<Restaurant> searchRestaurantByName( String name ) {
         List<Restaurant> result = new ArrayList<>();
         
@@ -206,6 +233,12 @@ public class ServiceMetier {
         return result;
     }
     
+    /**
+     * Renvoie le Restaurant identifié par l'id "id". Si aucun Restaurant ne
+     * correspond renvoie null
+     * @param id L'identifiant du Restaurant
+     * @return Restaurant|null
+     */
     public Restaurant findRestaurantById( Long id ) {
         
         try {
@@ -217,7 +250,16 @@ public class ServiceMetier {
         }
         return null;
     }
-       
+      
+    /**
+     * Crée une commande vide d'un Client vers un Restaurant. Renvoie la Commande
+     * si elle a bien été persistée, sinon renvoie null
+     * @param c Le client effectuant la commande
+     * @param r Le restaurant dans lequel a été effectuée la commande
+     * @return Commande|null
+     * @throws InvalidReferenceException Si le client ou le Restaurant fournis
+     * en paramètres n'existent pas dans l'unité de persistance
+     */
     public Commande creerCommande( Client c, Restaurant r ) throws InvalidReferenceException {
         
         if( !clientDAO.contains(c) ) {
@@ -239,7 +281,21 @@ public class ServiceMetier {
         return commande;
     }
     
+    /**
+     * Annule une commande. Une commande déjà validée ne peut pas être annulée.
+     * Renvoie true si la commande a bien été annulée, sinon renvoie false.
+     * @param c La commande à annuler
+     * @return boolean
+     */
     public boolean annulerCommande( Commande c ) {
+        
+        if(commandeDAO.contains(c)) {
+            return false;
+        }
+        
+        if( c.getEtat() == Commande.Etat.validee ) {
+            return false;
+        }
         
         JpaUtil.ouvrirTransaction();
         try {
@@ -256,6 +312,12 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoit la liste des urls des images d'une liste de restaurant
+     * @param restaurants La liste de restaurants pour lesquels on souhaite
+     * avoir l'url de leur image
+     * @return List<String>
+     */
     public List<String> getPictureUrlOf( List<Restaurant> restaurants ) {
         List<String> result = new ArrayList<>();
         
@@ -265,7 +327,19 @@ public class ServiceMetier {
         
         return result;
     }
-        
+       
+    /**
+     * Ajoute une qunatité de 1 pour un produit à une commande. 
+     * Renvoie la commande modifiée ou null
+     * en cas d'erreur de peristance
+     * @param c La commande à laquelle ajouter le produit
+     * @param p Le produit à ajouter
+     * @return Commande|null
+     * @throws InvalidReferenceException Exception levée si la commande ou le
+     * produit n'existent pas dans l'unité de peristance
+     * @throws InvalidActionException L'exception est levée si on essaie d'ajouter
+     * un produit qui n'appartient pas au restaurant qui est rattaché à la commande
+     */
     public Commande ajouterProduit( Commande c, Produit p ) throws InvalidReferenceException, InvalidActionException {
         
         if( !commandeDAO.contains(c) ) {
@@ -302,6 +376,17 @@ public class ServiceMetier {
         return c;
     }
     
+    /**
+     * Enlève une quantité de 1 pour un produit à une commande
+     * Renvoie la commande modifiée, renvoie null si la peristance a echouée
+     * @param c La commande à laquelle enlever le produit
+     * @param p Le produit à enlever
+     * @return Commmande|null
+     * @throws InvalidReferenceException La commande ou le produit n'existent
+     * pas dans l'unité de persistance
+     * @throws InvalidActionException L'exception peut être levée si le produit
+     * n'appartient pas à la commande ou si sa quantité est déjà égale à 0
+     */
     public Commande enleverProduit( Commande c, Produit p ) throws InvalidReferenceException, InvalidActionException {
         
         if( !commandeDAO.contains(c) ) {
@@ -347,6 +432,17 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Valide la commande. Renvoie Livraison si la commande a bien été validée
+     * et que la livraison a bien été attribuée à un livreur, sinon renvoie null
+     * @param c La commande à valider
+     * @return Livraison|null
+     * @throws InvalidReferenceException La commande n'existe pas dans l'unité
+     * de persistance
+     * @throws InvalidActionException L'exception est levée si l'utilisateur 
+     * essaie de valider une commande vide (toutes les quantités à 0 ou 
+     * aucune ligne de commande dans la commande)
+     */
     public Livraison validerCommande( Commande c ) throws InvalidReferenceException, InvalidActionException {
         
         if( !commandeDAO.contains(c) ) {
@@ -391,18 +487,49 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Valide la Livraison avec la date système actuelle. Renvoie la Livraison
+     * modifiée en cas de réussite, null sinon
+     * @param l La Livraison à valider
+     * @return Livraison|null
+     * @throws InvalidReferenceException La livraison n'existe pas dans l'unité
+     * de persistance
+     * @throws InvalidActionException L'exception est levée si la date de fin
+     * de livraison est inférieur ou égale à la date de début de livraison. Elle
+     * peut être également levée en cas de demande invalide validation (livraison
+     * non attribuée ou livraison déjà validée)
+     */
     public Livraison validerLivraison( Livraison l ) throws InvalidReferenceException, InvalidActionException {
         
         return validerLivraison(l, Calendar.getInstance().getTime());
         
     }
 
+    /**
+     * Renvoie le Livreur identifié par l'id "id". Si aucun Livreur ne
+     * correspond renvoie null
+     * @param id L'identifiant du Livreur
+     * @return Livreur|null
+     */
     public Livreur findLivreurById( Long id ) {
 
         return livreurDAO.findById(id);
 
     }
     
+    /**
+     * Valide la Livraison avec la date fournie en paramètres. Renvoie la Livraison
+     * modifiée en cas de réussite, null sinon
+     * @param l La Livraison à valider
+     * @param date La date à laquelle a été effectuée la livraison
+     * @return Livraison|null
+     * @throws InvalidReferenceException La livraison n'existe pas dans l'unité
+     * de persistance
+     * @throws InvalidActionException L'exception est levée si la date de fin
+     * de livraison est inférieur ou égale à la date de début de livraison. Elle
+     * peut être également levée en cas de demande invalide validation (livraison
+     * non attribuée ou livraison déjà validée)
+     */
     public Livraison validerLivraison( Livraison l, Date date ) throws InvalidReferenceException, InvalidActionException {
         
         if( !livraisonDAO.contains(l) ) {
@@ -436,22 +563,42 @@ public class ServiceMetier {
         
     }
     
+    /**
+     * Renvoie la liste des livraisons effectuées par les drônes
+     * @return List<Livraison>
+     */
     public List<Livraison> findLivraisonsParDrone() {
         return livraisonDAO.findLivraisonsParDrone();
     }
     
+    /**
+     * Renvoie la liste des clients qui ont une livraison en cours
+     * @return List<Client>
+     */
     public List<Client> findClientsEnAttenteDeLivraison() {
         return clientDAO.findClientsAvecLivraisonEnCours();    
     }
     
+    /**
+     * Renvoie la liste des clients qui N'ont PAS de livraison en cours
+     * @return List<Client>
+     */
     public List<Client> findClientsInactifs() {
         return clientDAO.findClientsInactifs();
     }
     
+    /**
+     * Renvoie la liste des livreurs en cours de livraison
+     * @return List<Livreur>
+     */
     public List<Livreur> findLivreursOccupes() {
         return livreurDAO.findNonLibres();
     }
     
+    /**
+     * Renvoie la liste des livreurs disponibles
+     * @return List<Livreur>
+     */
     public List<Livreur> findLivreursLibres() {
         return livreurDAO.findLibres();
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gustatif.dasi_project.exception;
 
 /**
@@ -12,12 +7,22 @@ package com.gustatif.dasi_project.exception;
  */
 public class EmailAlreadyUsedException extends Exception {
     
+    /**
+     * Message par défaut de l'exception
+     */
     protected static String msg = "L'adresse e-mail est déjà utilisée par un autre client";
 
+    /**
+     * Constructeur par défaut
+     */
     public EmailAlreadyUsedException() {
         super(msg);
     }
     
+    /**
+     * Constructeur avec information de la cause
+     * @param cause Cause
+     */
     public EmailAlreadyUsedException( Throwable cause ) {
         super(msg, cause);
     }

@@ -5,16 +5,13 @@
  */
 package com.gustatif.dasi_project.metier.modele;
 
-import com.google.maps.model.LatLng;
-import com.google.maps.model.TravelMode;
-import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * Classe correspondant à un drone de livraison
  * @author carhiliuc
  */
 @Entity
@@ -29,10 +26,16 @@ public class LivreurDrone extends Livreur {
      */
     private double vitesseMoyenne;
 
+    /**
+     * Constructeur par défaut
+     */
     public LivreurDrone() {
     }
 
-    
+    /**
+     * Constructeur avec vitesseMoyenne
+     * @param vitesseMoyenne La vitesse moyenne du drône
+     */
     public LivreurDrone(double vitesseMoyenne) {
         this.vitesseMoyenne = vitesseMoyenne;
     }

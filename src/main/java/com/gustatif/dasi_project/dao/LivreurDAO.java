@@ -1,30 +1,30 @@
 
 package com.gustatif.dasi_project.dao;
 
-import com.gustatif.dasi_project.metier.modele.Commande;
-import com.gustatif.dasi_project.metier.modele.Livraison;
 import com.gustatif.dasi_project.metier.modele.Livreur;
-import com.gustatif.dasi_project.metier.modele.LivreurDrone;
-import com.gustatif.dasi_project.metier.modele.LivreurPersonne;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
- *
+ * Le Data Access object chargé de manipuler les Livreur
  * @author carhiliuc
  */
 public class LivreurDAO extends CRUDDAo<Livreur>{
 
+    /**
+     * Constructeur par défaut
+     */
     public LivreurDAO() {
         super();
     }
     
+    /**
+     * Constructeur avec entity manager. Utilise l'entity manager pour effectuer
+     * la persistance
+     * @param em Entity Manager
+     */
     public LivreurDAO(EntityManager em) {
         super(em);
     }
@@ -48,6 +48,10 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         return livreurs;
     }      
     
+    /**
+     * Renvoie les livreurs libres
+     * @return List<Livreur>
+     */
     public List<Livreur> findLibres() {
         List<Livreur> livreurs = new ArrayList<>();
         try {
@@ -61,6 +65,10 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         return livreurs;
     }
     
+    /**
+     * Renvoie les livreurs qui sont en train d'effectuer une livraison
+     * @return List<Livreur>
+     */
     public List<Livreur> findNonLibres() {
         List<Livreur> livreurs = new ArrayList<>();
         try {
@@ -74,6 +82,10 @@ public class LivreurDAO extends CRUDDAo<Livreur>{
         return livreurs;
     }
  
+    /**
+     * Renvoie le nom de la classe gérée par LivreurDAO
+     * @return Class<Livreur> la classe gérée par le DAO
+     */
     @Override
     protected Class<Livreur> getEntityClass() {
         return Livreur.class;

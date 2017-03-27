@@ -7,16 +7,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 /**
- * CRUDDAo implémente les fonctions de base
+ * CRUDDAo implémente les fonctions de base pour les DAO
  * @author Loic
  * @param <T> Le type de modèle
  */
 abstract public class CRUDDAo<T extends Model> {
     
+    /**
+     * L'entity manager permettant au DAO de communiquer avec la base de données
+     */
     protected EntityManager em;
     
     /**
-     * Renvoie le nom de classe renvoyé par le DAO
+     * Renvoie le nom de classe gérée par le DAO
      * @return Class<T> Le nom de la classe de T
      */
     abstract protected Class<T> getEntityClass();

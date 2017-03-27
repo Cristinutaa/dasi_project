@@ -1,35 +1,73 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
-import com.gustatif.dasi_project.util.UrlPictureSearcher;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * Classe représentant un Restaurant
+ * @author Loic
+ */
 @Entity
 public class Restaurant extends Model implements Serializable {
+    
+    /**
+     * Identifiant unique du restaurant
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    /**
+     * Nom du restaurant
+     */
     private String denomination;
+    
+    /**
+     * Description du restaurant
+     */
     private String description;
+    
+    /**
+     * Adresse du restaurant
+     */
     private String adresse;
+    
+    /**
+     * Attribut longitude de la position GPS du restaurant
+     */
     private Double longitude;
+    
+    /**
+     * Attribut latitude de la position GPS du restaurant
+     */
     private Double latitude;
 
+    /**
+     * Liste de produits vendu par le restaurant
+     */
     @OneToMany
     private List<Produit> produits;
     
+    /**
+     * Constructeur par défaut
+     */
     protected Restaurant() {
         this.produits = new ArrayList<>();
     }
 
+    /**
+     * Constructeur renseigné
+     * @param denomination Le nom du restaurant
+     * @param description La description du restaurant
+     * @param adresse L'adresse du restaurant
+     */
     public Restaurant(String denomination, String description, String adresse) {
         this.denomination = denomination;
         this.description = description;

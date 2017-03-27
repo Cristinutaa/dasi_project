@@ -1,56 +1,79 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.SimpleFormatter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
+/**
+ * Classe correspondant à une livraison
+ * @author Loic
+ */
 @Entity
 public class Livraison extends Model implements Serializable {
     
+    /**
+     * Etat de la livraison
+     */
     public enum Etat {
         non_attribuee,
         en_cours,
         livree
     }
     
+    /**
+     * Identifiant unique de la livraison
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    /**
+     * Date de début de la livraison (départ du livreur)
+     */
     @Temporal(TemporalType.TIMESTAMP)
     protected Date dateDebut;
     
+    /**
+     * Date de fin de la livraison
+     */
     @Temporal(TemporalType.TIMESTAMP)
     protected Date dateFin;
     
+    /**
+     * Commande correspondant à la livraison
+     */
     @OneToOne
     protected Commande commande;
     
+    /**
+     * Etat de la livraison
+     */
     protected Etat etat;
     
+    /**
+     * Livreur effectuant la livraison
+     */
     @ManyToOne
     protected Livreur livreur;
 
+    /**
+     * Constructeur de la livraison
+     */
     public Livraison() {
     }
 
+    /**
+     * Livraison crée à partir de la commande correspondante
+     * @param commande La commande correspondante à la livraison
+     */
     public Livraison(Commande commande) {
         this.commande = commande;
         this.dateDebut = Calendar.getInstance().getTime();

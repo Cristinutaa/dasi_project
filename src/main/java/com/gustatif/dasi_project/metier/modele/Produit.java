@@ -1,30 +1,58 @@
 package com.gustatif.dasi_project.metier.modele;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
+/**
+ * Classe correspondant à un produit
+ * @author Loic
+ */
 @Entity
 public class Produit extends Model implements Serializable {
     
+    /**
+     * Identifiant unique du produit
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    /**
+     * La dénomination du produit (nom)
+     */
     private String denomination;
+    
+    /**
+     * La description du produit
+     */
     private String description;
+    
+    /**
+     * Le poids unitaire du produits en kg
+     */
     private Double poids;
+    
+    /**
+     * Le prix unitaire du produit en €uro
+     */
     private Double prix;
 
+    /**
+     * Constructeur par défaut
+     */
     public Produit() {
     }
 
+    /**
+     * Constructeur de produit
+     * @param denomination Le nom du produit
+     * @param description La description du produit
+     * @param poids Le poids du produit en kg
+     * @param prix Le prix du produit en €uro
+     */
     public Produit(String denomination, String description, Double poids, Double prix) {
         this.denomination = denomination;
         this.description = description;

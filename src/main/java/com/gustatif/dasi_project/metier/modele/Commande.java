@@ -12,33 +12,70 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+/**
+ * Class rerpésentant une Commande Client à un Restaurant
+ * @author Loic
+ */
 @Entity
 public class Commande extends Model implements Serializable {
     
+    /**
+     * L'etat de la commande
+     * en_cours : Le client est en train d'éditer sa Commande
+     * vaidee : La Commande a été finalisée en Livraison. La commande n'est plus
+     * annulable
+     */
     public enum Etat {
         en_cours,
         validee
     }
     
+    /**
+     * Identifiant unique de la Commande
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    /**
+     * Le client auquel est rattaché la commande
+     */
     @ManyToOne
     protected Client client;
     
+    /**
+     * Le restaurant auquel est rattaché la commande
+     */
     @ManyToOne
     protected Restaurant restaurant;
+    
+    /**
+     * L'état de la commande
+     */
     protected Etat etat;
     
+    /**
+     * La livraison crée lors de la validation de la commande. Peut être null
+     */
     @OneToOne
     protected Livraison livraison;
     
+    /**
+     * Les lignes commandes rattachées à la commande.
+     */
     @OneToMany(mappedBy = "commande", cascade = {CascadeType.ALL})
     protected List<LigneCommande> lignesCommandes;
     
+    /**
+     * Constructeur par défaut
+     */
     protected Commande() {}
 
+    /**
+     * Création d'une commande pour un Client et un Restaurant donnée
+     * @param client Le Client effectuant la commande
+     * @param restaurant Le Restaurant dans lequel est effectué la commande
+     */
     public Commande(Client client, Restaurant restaurant) {
         this.client = client;
         this.restaurant = restaurant;
@@ -74,6 +111,11 @@ public class Commande extends Model implements Serializable {
         this.lignesCommandes = lignesCommandes;
     }
     
+    /**
+     * Renvoie la livraison correspondant à la validation de la Commande. Si
+     * la commande est vide renvoie null
+     * @return Livraison|null
+     */
     public Livraison valider() {
         if( this.lignesCommandes.isEmpty() ) {
             return null;

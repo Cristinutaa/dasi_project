@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class ServiceTechnique {
+    
     /**
      * Envoyer le mail de confirmation de l'inscription d'un client
      * @param client - le client qui viens de s'inscrire
@@ -159,12 +159,22 @@ public class ServiceTechnique {
         return true;
     }
     
+    /**
+     * Renvoie l'url de l'image du restaurant
+     * @param r Le restaurant pour lequel on recherche une image
+     * @return String
+     */
     public static String getUrlPictureOf( Restaurant r ) {
         
         return UrlPictureSearcher.getUrlPictureForRestaurant(r.getDenomination());
         
     }
 
+    /**
+     * Renvoie la livraison formatée pour les emails
+     * @param l La livraison à formatter
+     * @return String
+     */
     public static String format( Livraison l ) {
 
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy 'à' hh'h'mm");

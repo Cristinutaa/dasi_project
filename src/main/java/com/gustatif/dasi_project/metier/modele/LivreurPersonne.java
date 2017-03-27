@@ -1,19 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gustatif.dasi_project.metier.modele;
 
-import com.google.maps.model.LatLng;
 import com.gustatif.dasi_project.config.Config;
-import com.gustatif.dasi_project.util.GeoTest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+/**
+ * Classe correspondant à un livreur à vélo
+ * @author Loic
+ */
 @Entity
 public class LivreurPersonne extends Livreur{
     
@@ -31,15 +27,30 @@ public class LivreurPersonne extends Livreur{
      */
     private String prenom;
 
+    /**
+     * Constructeur par défaut
+     */
     public LivreurPersonne() {
         
     }
     
+    /**
+     * Constructeur avec nom et prénom du livreur
+     * @param nom Le nom de famille du livreur
+     * @param prenom Le prénom du livreur
+     */
     public LivreurPersonne(String nom, String prenom) {
         this.nom = nom;
         this.prenom = prenom;
     }
     
+    /**
+     * Constructeur avec nom, prenom, charge maximal et adresse de départ
+     * @param nom Le nom de famille du livreur
+     * @param prenom Le prénom du livreur
+     * @param charge_maximale Le charge maximale supportée par le livreur
+     * @param adresse_base L'adresse de départ du livreur
+     */
     public LivreurPersonne(String nom, String prenom, double charge_maximale, String adresse_base) {
         super(charge_maximale, adresse_base);
         this.nom = nom;

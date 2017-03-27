@@ -6,22 +6,63 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 
+/**
+ * Classe représentant un Client
+ * @author Loic
+ */
 @Entity
 public class Client extends Model implements Serializable {
+    
+    /**
+     * Identifiant du client
+     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    /**
+     * Nom du client
+     */
     private String nom;
+    
+    /**
+     * Prénom du client
+     */
     private String prenom;
+    
+    /**
+     * Adresse mail du client
+     */
     private String mail;
+    
+    /**
+     * Adresse postale du client
+     */
     private String adresse;
+    
+    /**
+     * Attribut longitude de la position GPS de l'adresse du client
+     */
     private Double longitude;
+    
+    /**
+     * Attribut latitude de la position GPS de l'adresse du client
+     */
     private Double latitude;
 
+    /**
+     * Constructeur par défaut
+     */
     protected Client() {}
     
+    /**
+     * Constructeur d'un Client
+     * @param nom Le nom du client
+     * @param prenom Le prénom du client
+     * @param mail L'adresse mail du client (doit être une adresse mail valide)
+     * @param adresse L'adresse postale du client (doit être une adresse
+     * postale valide)
+     */
     public Client(String nom, String prenom, String mail, String adresse) {
         this.nom = nom;
         this.prenom = prenom;
@@ -42,7 +83,7 @@ public class Client extends Model implements Serializable {
     public String getPrenom() {
         return prenom;
     }
-
+    
     public String getMail() {
         return mail;
     }
@@ -67,7 +108,7 @@ public class Client extends Model implements Serializable {
     public LatLng getLocation() {
         return new LatLng(latitude, longitude);
     }
-    
+
     public Client setPrenom(String prenom) {
         this.prenom = prenom;
         return this;

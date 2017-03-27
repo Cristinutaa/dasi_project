@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.gustatif.dasi_project.metier.modele;
 
 import com.google.maps.model.LatLng;
@@ -18,39 +13,62 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 /**
- *
+ * Classe correspondant à un livreur
  * @author carhiliuc
  */
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class Livreur extends Model implements Serializable {
    
+    /**
+     * Identifiant unique du livreur
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
     /**
      * La longitude de la position de livreur
      */
     private double longitude;
+    
     /**
      * La latitude de la position de livreur
      */
     private double latitude;
+    
     /**
      * La charge maximale que peut être portée par le livreur
      */
     private double chargeMaximale;
+    
     /**
      * Le statut de livreur: libre ou occupé
      */
     private boolean libre = true;
+    
+    /**
+     * Adresse de départ du livreurs
+     */
     private String adresseBase;
     @OneToMany(mappedBy = "livreur")
+    
+    /**
+     * Ensemble de livraisons effectuée par le livreurs
+     */
     private List<Livraison> livraisons = new ArrayList<>();
     
+    /**
+     * Constructeur par défaut
+     */
     public Livreur() {
     }
 
+    /**
+     * Constructeur renseigné
+     * @param charge_maximale La charge maximal supportée par le livreur
+     * @param adresse_base L'adresse de départ du livreur
+     */
     public Livreur(double charge_maximale, String adresse_base) {
         this.chargeMaximale = charge_maximale;
         this.adresseBase = adresse_base;
